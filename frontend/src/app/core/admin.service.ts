@@ -48,6 +48,8 @@ export interface ActivityAdmin {
   description: string;
   startDate: string;
   endDate: string;
+  createdAt: string;
+  targetYearLevels: any;
   teacherName: string;
   teacherEmail: string;
   criteria: { criteriaId: number; name: string; maxScore: number; weight: number }[];

@@ -431,4 +431,15 @@ export class AdminManageComponent implements OnInit, OnDestroy {
         const d = new Date(dateStr);
         return d.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
     }
+
+    parseYearLevels(levels: any): number[] {
+        if (!levels) return [];
+        if (Array.isArray(levels)) return levels;
+        try { return JSON.parse(levels); } catch { return []; }
+    }
+
+    isAllYearLevels(levels: any): boolean {
+        const parsed = this.parseYearLevels(levels);
+        return parsed.length >= 4 && [1, 2, 3, 4].every(y => parsed.includes(y));
+    }
 }

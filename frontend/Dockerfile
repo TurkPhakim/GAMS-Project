@@ -5,23 +5,23 @@ RUN apk upgrade --no-cache
 
 WORKDIR /app
 
-# Copy package files and install dependencies
 COPY package.json package-lock.json* ./
 RUN npm ci --legacy-peer-deps
 
-# Copy source code and build for production
 COPY . .
 RUN npx ng build --configuration=production
 
 # Stage 2: Serve with nginx
 FROM nginx:stable-alpine
 
-# Copy custom nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# gettext provides envsubst for substituting ${DOMAIN} in nginx.conf at startup
+RUN apk add --no-cache gettext
 
-# Copy built Angular app from build stage
+COPY nginx.conf /etc/nginx/nginx.conf.template
+
 COPY --from=build /app/dist/gams-frontend /usr/share/nginx/html
 
-EXPOSE 80
+EXPOSE 80 443
 
-CMD ["nginx", "-g", "daemon off;"]
+# Substitute environment variables and start nginx
+CMD ["/bin/sh", "-c", "envsubst '${DOMAIN} ${ADMIN_IP_RANGE} ${PMA_SECRET_PATH}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"]

@@ -1140,14 +1140,21 @@
                 {{ activity.title }}
               </h3>
 
-              <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
-                <span class="text-base sm:text-lg text-slate-500 font-medium">สร้างโดย</span>
-                <span class="text-base sm:text-lg font-bold text-slate-800">{{ activity.teacherName }}</span>
-                <span class="text-base sm:text-lg text-slate-400">({{ activity.teacherEmail }})</span>
-                <span class="text-slate-300 text-lg">•</span>
-                <span class="text-base sm:text-lg font-semibold text-slate-600">{{ formatDate(activity.startDate) }}</span>
-                <span class="text-slate-400">–</span>
-                <span class="text-base sm:text-lg font-semibold text-slate-600">{{ formatDate(activity.endDate) }}</span>
+              <div class="mt-2 flex flex-col gap-1">
+                <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span class="text-base sm:text-lg text-slate-500 font-medium">สร้างโดย</span>
+                  <span class="text-base sm:text-lg font-bold text-slate-800">{{ activity.teacherName }}</span>
+                  <span class="text-base sm:text-lg text-slate-400">({{ activity.teacherEmail }})</span>
+                  <span class="text-slate-300 text-lg">•</span>
+                  <span class="text-sm sm:text-base text-slate-500 font-medium">ช่วงเวลา</span>
+                  <span class="text-sm sm:text-base font-semibold text-slate-600">{{ formatDate(activity.startDate) }}</span>
+                  <span class="text-slate-400">–</span>
+                  <span class="text-sm sm:text-base font-semibold text-slate-600">{{ formatDate(activity.endDate) }}</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span class="text-sm text-slate-400 font-medium">สร้างเมื่อ</span>
+                  <span class="text-sm font-semibold text-slate-500">{{ formatDate(activity.createdAt) }}</span>
+                </div>
               </div>
             </div>
 
@@ -1192,6 +1199,35 @@
                 </p>
               </div>
 
+              <!-- ชั้นปีที่เปิด -->
+              <div *ngIf="parseYearLevels(activity.targetYearLevels).length > 0">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="h-7 w-1.5 rounded-full bg-gradient-to-b from-sky-500 to-sky-300"></div>
+                  <h4 class="text-xl font-black text-slate-800">ชั้นปีที่เปิด</h4>
+                  <span class="text-base font-black text-sky-600 bg-sky-50 border border-sky-200 px-3 py-1 rounded-full">
+                    {{ isAllYearLevels(activity.targetYearLevels) ? 'ทุกชั้นปี' : parseYearLevels(activity.targetYearLevels).length + ' ชั้นปี' }}
+                  </span>
+                </div>
+                <div class="flex flex-wrap gap-3 pl-5">
+                  <span
+                    *ngIf="isAllYearLevels(activity.targetYearLevels)"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-base font-bold bg-sky-50 text-sky-800 border border-sky-200 shadow-sm"
+                  >
+                    <span class="h-2 w-2 rounded-full bg-sky-400 shrink-0"></span>
+                    ทุกชั้นปี
+                  </span>
+                  <ng-container *ngIf="!isAllYearLevels(activity.targetYearLevels)">
+                    <span
+                      *ngFor="let y of parseYearLevels(activity.targetYearLevels)"
+                      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-base font-bold bg-sky-50 text-sky-800 border border-sky-200 shadow-sm"
+                    >
+                      <span class="h-2 w-2 rounded-full bg-sky-400 shrink-0"></span>
+                      ชั้นปีที่ {{ y }}
+                    </span>
+                  </ng-container>
+                </div>
+              </div>
+
               <!-- เกณฑ์การให้คะแนน -->
               <div *ngIf="(activity.criteria?.length ?? 0) > 0">
                 <div class="flex items-center gap-3 mb-4">
@@ -1208,21 +1244,20 @@
                   >
                     <span class="h-2 w-2 rounded-full bg-indigo-400 shrink-0"></span>
                     {{ c.name }}
-                    <span class="text-indigo-400 font-extrabold text-sm">(น้ำหนัก {{ c.weight }})</span>
                   </span>
                 </div>
               </div>
 
-              <!-- ผู้ให้คะแนน -->
+              <!-- อาจารย์ผู้ให้คะแนน -->
               <div *ngIf="(activity.graders?.length ?? 0) > 0">
                 <div class="flex items-center gap-3 mb-4">
                   <div class="h-7 w-1.5 rounded-full bg-gradient-to-b from-violet-500 to-violet-300"></div>
-                  <h4 class="text-xl font-black text-slate-800">ผู้ให้คะแนน</h4>
+                  <h4 class="text-xl font-black text-slate-800">อาจารย์ผู้ให้คะแนน</h4>
                   <span class="text-base font-black text-violet-600 bg-violet-50 border border-violet-200 px-3 py-1 rounded-full">
                     {{ activity.graders.length }} คน
                   </span>
                 </div>
-                <div class="flex flex-wrap gap-3 pl-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pl-5">
                   <span
                     *ngFor="let g of activity.graders"
                     class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-base font-bold bg-violet-50 text-violet-800 border border-violet-200 shadow-sm"
@@ -1230,8 +1265,10 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-violet-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
-                    {{ g.fullName }}
-                    <span class="text-violet-400 font-semibold text-sm">({{ g.email }})</span>
+                    <span class="min-w-0">
+                      <span class="block truncate">{{ g.fullName }}</span>
+                      <span class="block text-violet-400 font-normal text-sm truncate">{{ g.email }}</span>
+                    </span>
                   </span>
                 </div>
               </div>
@@ -1270,13 +1307,13 @@
                       <!-- สมาชิก -->
                       <div *ngIf="(group.members?.length ?? 0) > 0">
                         <p class="text-sm font-black text-slate-500 uppercase tracking-wider mb-2">สมาชิก {{ group.members.length }} คน</p>
-                        <div class="flex flex-wrap gap-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                           <span
                             *ngFor="let m of group.members"
-                            class="inline-flex items-center px-4 py-2 rounded-xl text-base font-semibold bg-slate-50 text-slate-800 border border-slate-200"
+                            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-base font-semibold bg-slate-50 text-slate-800 border border-slate-200 min-w-0"
                           >
-                            {{ m.fullName }}
-                            <span *ngIf="m.nickname" class="text-slate-400 ml-1.5 font-normal text-sm">({{ m.nickname }})</span>
+                            <span class="truncate">{{ m.fullName }}</span>
+                            <span *ngIf="m.nickname" class="text-slate-400 font-normal text-sm shrink-0">({{ m.nickname }})</span>
                           </span>
                         </div>
                       </div>

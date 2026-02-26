@@ -8,12 +8,17 @@ services:
       MYSQL_DATABASE: gams_db
       MYSQL_CHARSET: utf8mb4
       MYSQL_COLLATION: utf8mb4_unicode_ci
+      # Passed into 03-create-app-user.sh at first init
+      MYSQL_APP_USER: ${MYSQL_APP_USER:-gams_app}
+      MYSQL_APP_PASSWORD: ${MYSQL_APP_PASSWORD:-change_this_app_password}
     ports:
       - "${MYSQL_PORT:-3306}:3306"
     volumes:
       - mysql-data:/var/lib/mysql
+      - mysql-logs:/var/log/mysql
       - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
       - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+      - ./database/03-create-app-user.sh:/docker-entrypoint-initdb.d/03-create-app-user.sh
     networks:
       - gams-network
     command: >
@@ -21,6 +26,11 @@ services:
       --collation-server=utf8mb4_unicode_ci
       --default-authentication-plugin=mysql_native_password
       --max-allowed-packet=64M
+      --innodb-buffer-pool-size=${MYSQL_INNODB_BUFFER_POOL_SIZE:-512M}
+      --max-connections=${MYSQL_MAX_CONNECTIONS:-150}
+      --slow-query-log=1
+      --slow-query-log-file=/var/log/mysql/slow-query.log
+      --long-query-time=1
     healthcheck:
       test:
         [
@@ -43,10 +53,12 @@ services:
     restart: unless-stopped
     environment:
       PMA_HOST: mysql
-      PMA_USER: root
-      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD:-gams_secure_password}
-    ports:
-      - "${PMA_PORT:-8888}:80"
+      # ไม่ใช้ PMA_USER/PMA_PASSWORD เพื่อบังคับ login ทุกครั้ง
+      # AllowRoot=false กำหนดใน config.user.inc.php
+      PMA_ABSOLUTE_URI: https://${DOMAIN:-localhost}/${PMA_SECRET_PATH:-db-manage-app}/
+    volumes:
+      - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
+    # ไม่ expose port โดยตรง — เข้าผ่าน nginx location เท่านั้น
     depends_on:
       mysql:
         condition: service_healthy
@@ -72,8 +84,9 @@ services:
       NODE_ENV: production
       PORT: 3000
       DB_HOST: mysql
-      DB_USER: root
-      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-gams_secure_password}
+      # ใช้ app user แทน root — มีสิทธิ์แค่ SELECT/INSERT/UPDATE/DELETE
+      DB_USER: ${MYSQL_APP_USER:-gams_app}
+      DB_PASSWORD: ${MYSQL_APP_PASSWORD:-change_this_app_password}
       DB_NAME: gams_db
       JWT_SECRET: ${JWT_SECRET:-REPLACE_WITH_STRONG_SECRET}
       JWT_EXPIRY: 24h
@@ -108,13 +121,27 @@ services:
       dockerfile: Dockerfile
     container_name: gams-frontend
     restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+      ADMIN_IP_RANGE: ${ADMIN_IP_RANGE:-127.0.0.1}
+      PMA_SECRET_PATH: ${PMA_SECRET_PATH:-db-manage-app}
     ports:
-      - "${FRONTEND_PORT:-4300}:80"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - certbot-conf:/etc/letsencrypt:ro
+      - certbot-www:/var/www/certbot:ro
+      - nginx-logs:/var/log/nginx
     depends_on:
       backend:
         condition: service_healthy
     networks:
       - gams-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "7"
     healthcheck:
       test: ["CMD-SHELL", "nc -z localhost 80 || exit 1"]
       interval: 30s
@@ -122,8 +149,21 @@ services:
       retries: 3
       start_period: 10s
 
+  # Certbot: obtains and renews Let's Encrypt certificates
+  certbot:
+    image: certbot/certbot:latest
+    container_name: gams-certbot
+    volumes:
+      - certbot-conf:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done'"
+
 volumes:
   mysql-data:
+  mysql-logs:
+  certbot-conf:
+  certbot-www:
+  nginx-logs:
 
 networks:
   gams-network:

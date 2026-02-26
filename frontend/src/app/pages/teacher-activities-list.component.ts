@@ -89,6 +89,11 @@ export class TeacherActivitiesListComponent implements OnInit, OnDestroy {
     }
   }
 
+  isAllYearLevels(activity: any): boolean {
+    const levels = this.getYearLevels(activity);
+    return levels.length >= 4 && [1, 2, 3, 4].every(y => levels.includes(y));
+  }
+
   deleteActivity(activityId: number): void {
     this.modalService.showConfirm('ยืนยันการลบ', 'ต้องการลบกิจกรรมนี้หรือไม่?', 'ลบ', 'ยกเลิก');
 
