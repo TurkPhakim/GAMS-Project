@@ -135,6 +135,8 @@ services:
     depends_on:
       backend:
         condition: service_healthy
+      phpmyadmin:
+        condition: service_started
     networks:
       - gams-network
     logging:
