@@ -1,0 +1,219 @@
+<app-header></app-header>
+
+<div
+  class="min-h-[calc(100vh-64px)] bg-[radial-gradient(1200px_600px_at_10%_10%,rgba(255,153,51,0.18),transparent),radial-gradient(900px_500px_at_90%_20%,rgba(59,130,246,0.16),transparent),radial-gradient(900px_500px_at_50%_100%,rgba(16,185,129,0.10),transparent)] relative overflow-hidden"
+>
+  <div
+    class="absolute inset-0 opacity-[0.06] bg-[linear-gradient(to_right,rgba(0,0,0,0.2)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.2)_1px,transparent_1px)] bg-[size:28px_28px]"
+  ></div>
+
+  <div class="absolute -top-28 -right-28 w-[420px] h-[420px] bg-primary-200/35 rounded-full blur-3xl"></div>
+  <div class="absolute -bottom-32 -left-32 w-[420px] h-[420px] bg-orange-200/45 rounded-full blur-3xl"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-10">
+
+    <!-- Page header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-black tracking-tight text-gray-900">รายชื่อนักศึกษา</h1>
+      <p class="mt-2 text-lg text-gray-600">ดูรายชื่อนักศึกษาทั้งหมดแยกตามชั้นปี (read-only)</p>
+    </div>
+
+    <!-- Search bar + total count -->
+    <div
+      class="mb-8 p-7 rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] relative overflow-hidden"
+    >
+      <div class="absolute -top-20 -right-20 w-80 h-80 bg-indigo-300/25 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-orange-300/25 rounded-full blur-3xl"></div>
+
+      <div class="relative flex items-center gap-5 flex-wrap">
+        <div class="relative flex-1 min-w-[320px]">
+          <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearchChange($event)"
+            placeholder="ค้นหาด้วยรหัสนักศึกษา ชื่อ หรือชื่อเล่น"
+            class="w-full pl-14 pr-5 py-4 rounded-2xl text-lg bg-white/90 border border-white/70 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent"
+          />
+        </div>
+
+        <!-- Total count badge -->
+        <div class="inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-white/90 border border-white/70 text-lg font-bold text-slate-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          ทั้งหมด {{ getTotalStudents() }} คน
+        </div>
+      </div>
+    </div>
+
+    <!-- Year panels -->
+    <div class="grid grid-cols-1 gap-8">
+      <div
+        *ngFor="let year of getStudentYearLevels()"
+        class="rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] overflow-hidden relative"
+      >
+        <div class="absolute -top-28 -right-28 w-96 h-96 bg-indigo-300/18 rounded-full blur-3xl"></div>
+
+        <!-- Panel Header -->
+        <div
+          class="relative flex items-center justify-between px-8 py-6 border-b border-white/60 bg-gradient-to-r from-orange-50/95 via-white/70 to-white/50"
+        >
+          <div class="flex items-center gap-4">
+            <h3 class="text-2xl font-black tracking-wide text-orange-700">
+              {{ getYearLabel(year) }}
+            </h3>
+
+            <span class="text-lg font-extrabold text-slate-800 bg-white/85 border border-white/70 px-4 py-2 rounded-full">
+              {{ studentPagination[year]?.total || studentsByYear[year]?.length || 0 }} คน
+            </span>
+
+            <div class="hidden md:flex items-center gap-2 ml-1">
+              <div class="h-2 w-16 rounded-full bg-gradient-to-r from-orange-500 to-indigo-500"></div>
+              <div class="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Table -->
+        <div class="relative overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="bg-gradient-to-r from-slate-200/95 via-slate-100/95 to-slate-200/90 border-b border-slate-200">
+                <th class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider">
+                  รหัสนักศึกษา
+                </th>
+                <th class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider">
+                  ชื่อ-นามสกุล
+                </th>
+                <th class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider">
+                  ชื่อเล่น
+                </th>
+                <th class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider">
+                  สถานะ
+                </th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y divide-slate-100/80">
+              <tr
+                *ngFor="let student of studentsByYear[year]"
+                class="hover:bg-orange-50/45 transition-colors"
+              >
+                <td class="px-8 py-5 text-lg font-semibold text-slate-800">
+                  {{ student.studentId }}
+                </td>
+                <td class="px-8 py-5 text-lg font-semibold text-slate-800">
+                  {{ student.fullName }}
+                </td>
+                <td class="px-8 py-5 text-lg text-slate-700">
+                  {{ student.nickname || "-" }}
+                </td>
+                <td class="px-8 py-5">
+                  <span
+                    class="inline-flex items-center px-4 py-2 rounded-full text-base font-extrabold border"
+                    [class.bg-emerald-50]="student.status === 'active'"
+                    [class.text-emerald-700]="student.status === 'active'"
+                    [class.border-emerald-200]="student.status === 'active'"
+                    [class.bg-slate-100]="student.status === 'inactive'"
+                    [class.text-slate-500]="student.status === 'inactive'"
+                    [class.border-slate-200]="student.status === 'inactive'"
+                  >
+                    <span
+                      class="mr-2.5 inline-block h-2.5 w-2.5 rounded-full"
+                      [class.bg-emerald-500]="student.status === 'active'"
+                      [class.bg-slate-400]="student.status === 'inactive'"
+                    ></span>
+                    {{ student.status }}
+                  </span>
+                </td>
+              </tr>
+
+              <tr *ngIf="!studentsByYear[year] || studentsByYear[year].length === 0">
+                <td colspan="4" class="px-8 py-14 text-center">
+                  <div class="inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-white/90 border border-white/70 text-lg font-semibold text-slate-700">
+                    ไม่พบรายชื่อนักศึกษา
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div
+          *ngIf="!isSearching && (studentPagination[year]?.totalPages ?? 0) > 1"
+          class="px-8 py-6 border-t border-white/60 flex items-center justify-center gap-2.5 bg-white/60"
+        >
+          <!-- Prev -->
+          <button
+            (click)="onStudentPageChange(year, studentCurrentPages[year] - 1)"
+            [disabled]="studentCurrentPages[year] === 1"
+            class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+            [class.bg-white]="studentCurrentPages[year] !== 1"
+            [class.text-slate-700]="studentCurrentPages[year] !== 1"
+            [class.hover:bg-slate-50]="studentCurrentPages[year] !== 1"
+            [class.text-slate-300]="studentCurrentPages[year] === 1"
+            [class.cursor-not-allowed]="studentCurrentPages[year] === 1"
+            [class.bg-slate-50]="studentCurrentPages[year] === 1"
+            [class.border-slate-200]="true"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <!-- Page numbers -->
+          <button
+            *ngFor="let page of getPageNumbers(studentPagination[year], studentCurrentPages[year])"
+            (click)="onStudentPageChange(year, page)"
+            class="px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+            [class.bg-gradient-to-r]="page === studentCurrentPages[year]"
+            [class.from-orange-600]="page === studentCurrentPages[year]"
+            [class.to-orange-500]="page === studentCurrentPages[year]"
+            [class.text-white]="page === studentCurrentPages[year]"
+            [class.border-orange-500]="page === studentCurrentPages[year]"
+            [class.bg-white]="page !== studentCurrentPages[year]"
+            [class.hover:bg-slate-50]="page !== studentCurrentPages[year]"
+            [class.text-slate-700]="page !== studentCurrentPages[year]"
+            [class.border-slate-200]="page !== studentCurrentPages[year]"
+          >
+            {{ page }}
+          </button>
+
+          <!-- Next -->
+          <button
+            (click)="onStudentPageChange(year, studentCurrentPages[year] + 1)"
+            [disabled]="studentCurrentPages[year] === studentPagination[year]?.totalPages"
+            class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+            [class.bg-white]="studentCurrentPages[year] !== studentPagination[year]?.totalPages"
+            [class.text-slate-700]="studentCurrentPages[year] !== studentPagination[year]?.totalPages"
+            [class.hover:bg-slate-50]="studentCurrentPages[year] !== studentPagination[year]?.totalPages"
+            [class.text-slate-300]="studentCurrentPages[year] === studentPagination[year]?.totalPages"
+            [class.cursor-not-allowed]="studentCurrentPages[year] === studentPagination[year]?.totalPages"
+            [class.bg-slate-50]="studentCurrentPages[year] === studentPagination[year]?.totalPages"
+            [class.border-slate-200]="true"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- No results when searching -->
+    <div
+      *ngIf="isSearching && getStudentYearLevels().length === 0"
+      class="rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] p-14 text-center text-lg font-semibold text-slate-700"
+    >
+      ไม่พบนักศึกษา
+    </div>
+
+  </div>
+</div>

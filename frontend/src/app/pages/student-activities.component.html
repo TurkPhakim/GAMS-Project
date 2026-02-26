@@ -1,0 +1,465 @@
+<app-header></app-header>
+
+<div class="max-w-7xl mx-auto px-6 py-10">
+  <h1 class="text-3xl font-black text-slate-800 mb-10 tracking-wide">
+    กิจกรรมที่เปิดรับ
+  </h1>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="flex items-center justify-center py-20">
+    <svg
+      class="animate-spin h-10 w-10 text-orange-600"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"
+      ></circle>
+      <path
+        class="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+      ></path>
+    </svg>
+    <span class="ml-4 text-lg text-slate-500 font-medium">
+      กำลังโหลดกิจกรรม...
+    </span>
+  </div>
+
+  <!-- Activity Cards -->
+  <div *ngIf="!loading" class="grid grid-cols-1 gap-6">
+    <div
+      *ngFor="let activity of activities"
+      class="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/60 shadow-[0_18px_55px_-25px_rgba(0,0,0,0.35)] p-8 hover:shadow-[0_22px_65px_-25px_rgba(0,0,0,0.45)] transition-all duration-300"
+    >
+      <div
+        class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6"
+      >
+        <!-- LEFT -->
+        <div class="flex-1 min-w-0">
+          <h2 class="text-3xl font-black text-orange-600 truncate">
+            {{ activity.title }}
+          </h2>
+
+          <p class="text-lg text-slate-600 mt-2 leading-relaxed">
+            {{ activity.description }}
+          </p>
+
+          <!-- Meta Info -->
+          <div
+            class="mt-5 flex flex-wrap items-center gap-x-7 gap-y-3 text-base text-slate-600"
+          >
+            <!-- Teacher -->
+            <span class="inline-flex items-center gap-2">
+              <svg
+                class="w-6 h-6 text-slate-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M18 20a6 6 0 00-12 0" />
+                <path d="M12 14a4 4 0 100-8 4 4 0 000 8z" />
+              </svg>
+              <span class="font-semibold text-slate-700">
+                {{ activity.teacherName }}
+              </span>
+            </span>
+
+            <!-- Date range -->
+            <span class="inline-flex items-center gap-2">
+              <svg
+                class="w-6 h-6 text-slate-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M8 2v2M16 2v2" />
+                <path d="M3 9h18" />
+                <path
+                  d="M5 5h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"
+                />
+              </svg>
+              <span class="font-semibold text-slate-700">
+                {{ activity.startDate | date: "dd/MM/yyyy" }} -
+                {{ activity.endDate | date: "dd/MM/yyyy" }}
+              </span>
+            </span>
+
+            <!-- Group count -->
+            <span class="inline-flex items-center gap-2">
+              <svg
+                class="w-6 h-6 text-slate-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="8" r="3" />
+                <path d="M6 20a6 6 0 0112 0" />
+                <circle cx="5" cy="10" r="2" />
+                <path d="M1 20a4 4 0 018 0" />
+                <circle cx="19" cy="10" r="2" />
+                <path d="M15 20a4 4 0 018 0" />
+              </svg>
+
+              <span class="font-semibold text-slate-700">
+                {{ activity.groupCount || 0 }} กลุ่ม
+              </span>
+            </span>
+
+            <!-- Year levels -->
+            <span class="inline-flex items-center gap-2">
+              <svg
+                class="w-6 h-6 text-slate-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M7 4h10a2 2 0 012 2v16l-7-4-7 4V6a2 2 0 012-2z" />
+              </svg>
+              <span class="font-semibold text-slate-700">
+                {{ formatYearLevels(activity.targetYearLevels) }}
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="flex items-center gap-3 flex-shrink-0">
+          <!-- Joined badge (non-click) -->
+          <span
+            *ngIf="activity.myGroupId"
+            class="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-200 px-4 py-2 rounded-2xl text-base font-bold"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+            เข้าร่วมแล้ว
+          </span>
+
+          <!-- Create Group -->
+          <a
+            *ngIf="!activity.myGroupId"
+            [routerLink]="['/student/groups']"
+            [queryParams]="{ createForActivity: activity.activityId }"
+            class="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white px-5 py-3 rounded-2xl text-base font-black shadow-lg hover:shadow-xl hover:brightness-110 transition-all duration-200"
+          >
+            <svg
+              class="w-7 h-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 5v14" />
+              <path d="M5 12h14" />
+            </svg>
+            สร้างกลุ่ม
+          </a>
+
+          <!-- View Score -->
+          <button
+            *ngIf="activity.myGroupId"
+            (click)="openScoreDialog(activity)"
+            class="inline-flex items-center gap-2 border-2 border-orange-200 text-orange-600 px-5 py-3 rounded-2xl text-base font-black hover:bg-orange-50 transition-all duration-200"
+          >
+            <svg
+              class="w-7 h-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M4 19V5" />
+              <path d="M4 19h16" />
+              <path d="M8 17v-6" />
+              <path d="M12 17V7" />
+              <path d="M16 17v-4" />
+            </svg>
+            ดูคะแนน
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      *ngIf="activities.length === 0"
+      class="bg-white/80 backdrop-blur-xl rounded-3xl border border-white/60 shadow-[0_18px_55px_-25px_rgba(0,0,0,0.35)] p-16 text-center"
+    >
+      <svg
+        class="w-16 h-16 text-slate-300 mx-auto mb-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M7 7h10" />
+        <path d="M7 12h10" />
+        <path d="M7 17h10" />
+        <path d="M4 5h16v16H4z" />
+      </svg>
+      <p class="text-lg text-slate-500 font-medium">
+        ยังไม่มีกิจกรรมที่ลงทะเบียนได้ตอนนี้
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Score Dialog ===== -->
+<div
+  *ngIf="scoreDialogVisible"
+  class="fixed inset-0 z-40 flex items-center justify-center p-4"
+  (click)="closeScoreDialog()"
+>
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-slate-900/35 backdrop-blur-sm"></div>
+
+  <!-- Modal -->
+  <div
+    class="relative z-10 w-full max-w-2xl overflow-hidden rounded-3xl bg-white/70 backdrop-blur-xl border border-white/60 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.40)]"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Header -->
+    <div class="relative px-6 py-5 border-b border-white/60 overflow-hidden">
+      <div
+        class="absolute -top-16 -right-16 w-64 h-64 bg-orange-300/20 rounded-full blur-3xl"
+      ></div>
+
+      <div class="relative flex items-center justify-between gap-4">
+        <div class="min-w-0">
+          <h2 class="text-2xl font-black text-slate-900 truncate">
+            {{ scoreDialogActivity?.title }}
+          </h2>
+          <div class="mt-2 flex items-center gap-2">
+            <div
+              class="h-1 w-16 rounded-full bg-gradient-to-r from-orange-500 to-indigo-500"
+            ></div>
+            <div class="h-1.5 w-1.5 rounded-full bg-orange-500"></div>
+            <div
+              class="h-1 w-10 rounded-full bg-gradient-to-r from-indigo-500 to-orange-500"
+            ></div>
+          </div>
+        </div>
+
+        <button
+          (click)="closeScoreDialog()"
+          class="flex-shrink-0 p-2 rounded-2xl text-slate-500 hover:text-slate-700 hover:bg-white/70 transition"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="p-6 sm:p-7 max-h-[78vh] overflow-y-auto">
+
+      <!-- Loading -->
+      <div *ngIf="scoreDialogLoading" class="flex items-center justify-center py-14">
+        <svg
+          class="animate-spin h-10 w-10 text-orange-600"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+          ></path>
+        </svg>
+        <span class="ml-4 text-lg text-slate-500 font-medium">กำลังโหลดคะแนน...</span>
+      </div>
+
+      <!-- No grades yet -->
+      <div
+        *ngIf="!scoreDialogLoading && !hasGrades()"
+        class="flex flex-col items-center justify-center py-14 gap-4"
+      >
+        <svg
+          class="w-16 h-16 text-slate-300"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 8v4l3 3" />
+          <path d="M21 12a9 9 0 1 1-18 0a9 9 0 0 1 18 0Z" />
+        </svg>
+        <p class="text-lg font-bold text-slate-500">ยังไม่มีคะแนน — รออาจารย์ให้คะแนน</p>
+      </div>
+
+      <!-- Grades available -->
+      <div *ngIf="!scoreDialogLoading && hasGrades()">
+
+        <!-- Overall Grade Badge -->
+        <div class="flex flex-col items-center gap-3 mb-8">
+          <p class="text-base font-bold text-slate-500 uppercase tracking-widest">คะแนนรวม</p>
+          <div class="flex items-center gap-5">
+            <div class="text-center">
+              <div class="text-5xl font-black text-slate-800">
+                {{ scoreDialogData.overallScore }}
+              </div>
+              <div class="text-base font-bold text-slate-500 mt-1">GPA</div>
+            </div>
+            <div
+              class="inline-flex items-center justify-center w-20 h-20 rounded-3xl text-3xl font-black text-white shadow-lg bg-gradient-to-br"
+              [ngClass]="getGradeBg(scoreDialogData.finalGrade)"
+            >
+              {{ scoreDialogData.finalGrade }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Criteria Breakdown -->
+        <div class="mb-7">
+          <div class="flex items-center gap-2.5 mb-4">
+            <div class="w-1.5 h-6 rounded-full bg-indigo-500"></div>
+            <h3 class="text-lg font-black text-slate-800">เกณฑ์การให้คะแนน</h3>
+          </div>
+
+          <div class="rounded-2xl overflow-hidden border border-white/60 ring-1 ring-black/5">
+            <table class="w-full">
+              <thead>
+                <tr class="bg-gradient-to-r from-slate-100/95 to-slate-50/95 border-b border-slate-200">
+                  <th class="px-5 py-4 text-left text-sm font-black text-slate-600 uppercase tracking-wider">
+                    เกณฑ์
+                  </th>
+                  <th class="px-5 py-4 text-center text-sm font-black text-slate-600 uppercase tracking-wider">
+                    น้ำหนัก
+                  </th>
+                  <th class="px-5 py-4 text-center text-sm font-black text-slate-600 uppercase tracking-wider">
+                    GPA
+                  </th>
+                  <th class="px-5 py-4 text-center text-sm font-black text-slate-600 uppercase tracking-wider">
+                    เกรด
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100/80 bg-white/60">
+                <tr
+                  *ngFor="let cs of scoreDialogData.criteriaScores"
+                  class="hover:bg-orange-50/40 transition-colors"
+                >
+                  <td class="px-5 py-4 text-base font-semibold text-slate-800">
+                    {{ cs.name }}
+                  </td>
+                  <td class="px-5 py-4 text-center text-base text-slate-600">
+                    {{ cs.weight }}
+                  </td>
+                  <td class="px-5 py-4 text-center text-base font-bold text-slate-800">
+                    {{ cs.averageScore }}
+                  </td>
+                  <td class="px-5 py-4 text-center">
+                    <span
+                      class="inline-flex items-center justify-center min-w-[44px] px-3 py-1 rounded-xl text-sm font-black text-white bg-gradient-to-r"
+                      [ngClass]="getGradeBg(cs.grade)"
+                    >
+                      {{ cs.grade }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Teacher Comments -->
+        <div *ngIf="scoreDialogData.comments && scoreDialogData.comments.length > 0">
+          <div class="flex items-center gap-2.5 mb-4">
+            <div class="w-1.5 h-6 rounded-full bg-orange-500"></div>
+            <h3 class="text-lg font-black text-slate-800">ความคิดเห็นจากอาจารย์</h3>
+          </div>
+
+          <div class="flex flex-col gap-3">
+            <div
+              *ngFor="let c of scoreDialogData.comments"
+              class="p-4 rounded-2xl bg-white/70 border border-white/60 ring-1 ring-black/5"
+            >
+              <div class="flex items-center gap-2 mb-2">
+                <svg
+                  class="w-5 h-5 text-orange-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 20a6 6 0 00-12 0" />
+                  <path d="M12 14a4 4 0 100-8 4 4 0 000 8z" />
+                </svg>
+                <span class="text-sm font-black text-slate-700">{{ c.teacherName }}</span>
+              </div>
+              <p class="text-base text-slate-700 leading-relaxed">{{ c.comment }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- No comments -->
+        <div
+          *ngIf="!scoreDialogData.comments || scoreDialogData.comments.length === 0"
+        >
+          <div class="flex items-center gap-2.5 mb-4">
+            <div class="w-1.5 h-6 rounded-full bg-orange-500"></div>
+            <h3 class="text-lg font-black text-slate-800">ความคิดเห็นจากอาจารย์</h3>
+          </div>
+          <p class="text-base text-slate-500 font-medium px-1">ยังไม่มีความคิดเห็น</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

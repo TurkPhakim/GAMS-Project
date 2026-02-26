@@ -1,0 +1,354 @@
+<app-header></app-header>
+
+<div
+  class="min-h-[calc(100vh-64px)] bg-[radial-gradient(1200px_600px_at_10%_10%,rgba(255,153,51,0.18),transparent),radial-gradient(900px_500px_at_90%_20%,rgba(255,120,20,0.12),transparent),radial-gradient(900px_500px_at_50%_100%,rgba(245,158,11,0.10),transparent)] relative overflow-hidden"
+>
+  <div
+    class="absolute inset-0 opacity-[0.06] bg-[linear-gradient(to_right,rgba(0,0,0,0.2)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.2)_1px,transparent_1px)] bg-[size:28px_28px]"
+  ></div>
+
+  <div class="absolute -top-28 -right-28 w-[420px] h-[420px] bg-orange-300/40 rounded-full blur-3xl"></div>
+  <div class="absolute -bottom-32 -left-32 w-[420px] h-[420px] bg-amber-200/45 rounded-full blur-3xl"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-10" *ngIf="!loading && progressData">
+
+    <div class="mb-8 relative overflow-hidden rounded-3xl border border-orange-300/50 bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 text-white p-8 sm:p-10 shadow-[0_20px_60px_-20px_rgba(234,88,12,0.45)]">
+      <div class="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-amber-400/20 rounded-full blur-3xl"></div>
+
+      <div class="relative flex items-start gap-5">
+        <div class="shrink-0 w-16 h-16 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center backdrop-blur-sm">
+          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v18h18" />
+            <path d="M7 14l3-3 3 2 4-6" />
+          </svg>
+        </div>
+
+        <div class="flex-1">
+          <h1 class="text-4xl sm:text-5xl font-black tracking-tight">{{ progressData.activity.title }}</h1>
+          <p *ngIf="progressData.activity.description" class="mt-2 text-lg text-white/80 leading-relaxed">
+            {{ progressData.activity.description }}
+          </p>
+          <div class="mt-4 flex flex-wrap gap-6 text-lg font-medium text-white/70">
+            <span class="inline-flex items-center gap-2">
+              <svg class="w-6 h-6 text-white/80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              เริ่ม: {{ formatDate(progressData.activity.startDate) }}
+            </span>
+            <span class="inline-flex items-center gap-2">
+              <svg class="w-6 h-6 text-white/80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              สิ้นสุด: {{ formatDate(progressData.activity.endDate) }}
+            </span>
+          </div>
+
+          <div class="mt-5 flex items-center w-full max-w-xl">
+            <span class="flex-1 h-[3px] bg-gradient-to-r from-white/60 to-amber-300/60 rounded-full"></span>
+            <span class="mx-3 w-3 h-3 bg-white/70 rounded-full"></span>
+            <span class="flex-1 h-[3px] bg-gradient-to-r from-amber-300/60 to-white/60 rounded-full"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-7 mb-10">
+      <div class="relative rounded-3xl border border-orange-200/60 overflow-hidden p-7 bg-gradient-to-br from-orange-200/85 via-orange-100/70 to-white/60 backdrop-blur-xl shadow-[0_18px_50px_-20px_rgba(234,88,12,0.2)]">
+        <div class="absolute -top-24 -right-24 w-56 h-56 bg-orange-500/25 rounded-full blur-2xl"></div>
+        <div class="absolute -bottom-28 -left-28 w-64 h-64 bg-orange-600/15 rounded-full blur-2xl"></div>
+
+        <div class="relative flex items-start justify-between">
+          <div>
+            <div class="flex items-center gap-3 text-xl font-bold text-gray-900">
+              <svg class="w-7 h-7 text-orange-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              กลุ่มที่เข้าร่วม
+            </div>
+            <div class="text-5xl font-black text-gray-900 mt-3">{{ progressData.totalGroups }}</div>
+          </div>
+
+          <div class="rounded-2xl bg-white/85 border border-orange-200/70 p-4">
+            <svg class="w-10 h-10 text-orange-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="relative mt-6 flex items-center w-full">
+          <span class="flex-1 h-[4px] bg-gradient-to-r from-orange-700 to-orange-500 rounded-full"></span>
+          <span class="mx-3 w-3.5 h-3.5 bg-orange-600 rounded-full"></span>
+          <span class="flex-1 h-[4px] bg-gradient-to-r from-orange-500 to-orange-700 rounded-full"></span>
+        </div>
+      </div>
+
+      <div class="relative rounded-3xl border border-orange-200/60 overflow-hidden p-7 bg-gradient-to-br from-emerald-200/85 via-emerald-100/70 to-white/60 backdrop-blur-xl shadow-[0_18px_50px_-20px_rgba(234,88,12,0.15)]">
+        <div class="absolute -top-24 -right-24 w-56 h-56 bg-emerald-500/22 rounded-full blur-2xl"></div>
+        <div class="absolute -bottom-28 -left-28 w-64 h-64 bg-emerald-700/14 rounded-full blur-2xl"></div>
+
+        <div class="relative flex items-start justify-between">
+          <div>
+            <div class="flex items-center gap-3 text-xl font-bold text-gray-900">
+              <svg class="w-7 h-7 text-emerald-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              ผู้ให้คะแนนส่งแล้ว
+            </div>
+            <div class="text-5xl font-black text-gray-900 mt-3">{{ progressData.gradersSubmitted }}</div>
+            <div class="text-base font-semibold text-gray-600 mt-1">จากทั้งหมด {{ progressData.totalGraders }} คน</div>
+          </div>
+
+          <div class="rounded-2xl bg-white/85 border border-orange-200/70 p-4">
+            <svg class="w-10 h-10 text-emerald-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="relative mt-6 flex items-center w-full">
+          <span class="flex-1 h-[4px] bg-gradient-to-r from-emerald-800 to-emerald-500 rounded-full"></span>
+          <span class="mx-3 w-3.5 h-3.5 bg-emerald-700 rounded-full"></span>
+          <span class="flex-1 h-[4px] bg-gradient-to-r from-emerald-500 to-emerald-800 rounded-full"></span>
+        </div>
+      </div>
+
+      <div class="relative rounded-3xl border border-orange-200/60 overflow-hidden p-7 bg-gradient-to-br from-amber-200/85 via-amber-100/70 to-white/60 backdrop-blur-xl shadow-[0_18px_50px_-20px_rgba(234,88,12,0.15)]">
+        <div class="absolute -top-24 -right-24 w-56 h-56 bg-amber-500/22 rounded-full blur-2xl"></div>
+        <div class="absolute -bottom-28 -left-28 w-64 h-64 bg-amber-700/12 rounded-full blur-2xl"></div>
+
+        <div class="relative flex items-start justify-between">
+          <div>
+            <div class="flex items-center gap-3 text-xl font-bold text-gray-900">
+              <svg class="w-7 h-7 text-amber-800" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              กำลังดำเนินการ
+            </div>
+            <div class="text-5xl font-black text-gray-900 mt-3">{{ progressData.gradersDraft }}</div>
+          </div>
+
+          <div class="rounded-2xl bg-white/85 border border-orange-200/70 p-4">
+            <svg class="w-10 h-10 text-amber-800" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="relative mt-6 flex items-center w-full">
+          <span class="flex-1 h-[4px] bg-gradient-to-r from-amber-900 to-amber-600 rounded-full"></span>
+          <span class="mx-3 w-3.5 h-3.5 bg-amber-800 rounded-full"></span>
+          <span class="flex-1 h-[4px] bg-gradient-to-r from-amber-600 to-amber-900 rounded-full"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative overflow-hidden rounded-3xl border border-orange-200/50 bg-white/75 backdrop-blur-xl mb-10 shadow-[0_18px_50px_-20px_rgba(234,88,12,0.2)]">
+      <div class="relative px-7 py-6 sm:px-8 sm:py-7 bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 text-white">
+        <div class="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-amber-400/20 rounded-full blur-3xl"></div>
+
+        <div class="relative flex items-start gap-4">
+          <div class="shrink-0 w-14 h-14 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center backdrop-blur-sm">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-black tracking-tight">ความคืบหน้าผู้ให้คะแนน</h2>
+            <p class="mt-1 text-lg text-white/75">ติดตามสถานะการให้คะแนนของอาจารย์แต่ละท่าน</p>
+            <div class="mt-4 flex items-center w-full max-w-md">
+              <span class="flex-1 h-[3px] bg-gradient-to-r from-white/60 to-amber-300/60 rounded-full"></span>
+              <span class="mx-3 w-3 h-3 bg-white/70 rounded-full"></span>
+              <span class="flex-1 h-[3px] bg-gradient-to-r from-amber-300/60 to-white/60 rounded-full"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-6 py-6 sm:px-8 sm:py-7">
+        <div class="overflow-x-auto">
+          <table class="w-full text-lg">
+            <thead>
+              <tr class="bg-gradient-to-r from-orange-100/80 to-amber-100/60 border-y border-orange-200/50">
+                <th class="px-6 py-4 text-left font-extrabold text-orange-800 tracking-wide text-lg">ผู้ให้คะแนน</th>
+                <th class="px-6 py-4 text-center font-extrabold text-orange-800 tracking-wide text-lg">สถานะ</th>
+                <th class="px-6 py-4 text-center font-extrabold text-orange-800 tracking-wide text-lg">ให้คะแนนแล้ว</th>
+                <th class="px-6 py-4 text-center font-extrabold text-orange-800 tracking-wide text-lg">วันที่ส่ง</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-orange-100/60">
+              <tr *ngFor="let grader of progressData.graders" class="hover:bg-orange-50/40 transition-colors">
+                <td class="px-6 py-5">
+                  <div class="text-xl font-bold text-slate-900">{{ grader.fullName }}</div>
+                  <div class="text-base font-medium text-orange-400">{{ grader.email }}</div>
+                </td>
+                <td class="px-6 py-5 text-center">
+                  <span
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-base font-extrabold border"
+                    [ngClass]="{
+                      'bg-emerald-100 text-emerald-800 border-emerald-200': grader.status === 'submitted',
+                      'bg-amber-100 text-amber-900 border-amber-200': grader.status !== 'submitted'
+                    }"
+                  >
+                    <svg *ngIf="grader.status === 'submitted'" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                    <svg *ngIf="grader.status !== 'submitted'" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 8v4l3 3" />
+                      <path d="M21 12a9 9 0 1 1-18 0a9 9 0 0 1 18 0Z" />
+                    </svg>
+                    {{ grader.status === 'submitted' ? 'ส่งแล้ว' : 'ร่าง' }}
+                  </span>
+                </td>
+                <td class="px-6 py-5 text-center">
+                  <div class="flex items-center gap-3 justify-center">
+                    <div class="w-32 h-3.5 rounded-full bg-orange-100 overflow-hidden">
+                      <div
+                        class="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-400 transition-all duration-500"
+                        [style.width.%]="getGraderProgressPercent(grader)"
+                      ></div>
+                    </div>
+                    <span class="text-lg font-black text-orange-800">{{ grader.gradedGroupCount }}/{{ grader.totalGroupCount }}</span>
+                  </div>
+                </td>
+                <td class="px-6 py-5 text-center text-lg text-slate-700 font-semibold">
+                  {{ grader.submittedAt ? formatDateTime(grader.submittedAt) : '-' }}
+                </td>
+              </tr>
+
+              <tr *ngIf="progressData.graders.length === 0">
+                <td colspan="4" class="px-8 py-12 text-center text-orange-300 text-xl font-semibold">ยังไม่มีผู้ให้คะแนน</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-7">
+      <h2 class="text-3xl font-black text-gray-900">คะแนนแต่ละกลุ่ม</h2>
+    </div>
+
+    <div *ngIf="progressData.groups.length === 0" class="relative overflow-hidden rounded-3xl border border-orange-200/50 bg-white/75 backdrop-blur-xl p-12 text-center">
+      <p class="text-xl text-orange-300 font-semibold">ยังไม่มีกลุ่มเข้าร่วมกิจกรรมนี้</p>
+    </div>
+
+    <div class="space-y-5">
+      <div
+        *ngFor="let group of progressData.groups"
+        class="relative overflow-hidden rounded-3xl border border-orange-200/50 bg-white/75 backdrop-blur-xl shadow-[0_18px_50px_-20px_rgba(234,88,12,0.15)]"
+      >
+        <div
+          class="px-8 py-6 flex items-center justify-between cursor-pointer hover:bg-orange-50/40 transition bg-gradient-to-r from-orange-50/60 via-amber-50/40 to-white/50"
+          (click)="toggleGroup(group.groupId)"
+        >
+          <div class="flex items-center gap-4">
+            <svg
+              class="w-7 h-7 text-orange-400 transition-transform duration-200"
+              [class.rotate-90]="expandedGroups[group.groupId]"
+              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+            <h3 class="text-2xl font-black text-orange-900">{{ group.groupName }}</h3>
+            <span class="px-4 py-2 rounded-full bg-gradient-to-r from-orange-100 to-amber-100 text-base font-bold text-orange-800 border border-orange-200">
+              {{ group.memberCount }} สมาชิก
+            </span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span
+              *ngIf="group.averageGrade"
+              class="inline-flex items-center justify-center min-w-[56px] px-4 py-2 rounded-2xl font-black text-xl text-white bg-gradient-to-r"
+              [ngClass]="{
+                'from-emerald-600 to-emerald-500': group.averageGrade === 'A' || group.averageGrade === 'B+',
+                'from-blue-600 to-blue-500': group.averageGrade === 'B' || group.averageGrade === 'C+',
+                'from-amber-600 to-amber-500': group.averageGrade === 'C' || group.averageGrade === 'D+',
+                'from-red-600 to-red-500': group.averageGrade === 'D' || group.averageGrade === 'F'
+              }"
+            >
+              {{ group.averageGrade }}
+            </span>
+            <span *ngIf="!group.averageGrade" class="text-xl font-black text-orange-300">-</span>
+            <span *ngIf="group.averageGpa !== null" class="text-base font-bold text-orange-600">
+              ({{ group.averageGpa }})
+            </span>
+          </div>
+        </div>
+
+        <div *ngIf="expandedGroups[group.groupId]" class="border-t border-orange-200/50">
+          <div class="px-8 py-5 bg-gradient-to-r from-orange-50/50 to-amber-50/30">
+            <div class="text-base font-bold text-orange-600 mb-3">สมาชิกในกลุ่ม</div>
+            <div class="flex flex-wrap gap-2">
+              <span
+                *ngFor="let m of group.members"
+                class="px-4 py-2 rounded-2xl text-base font-bold bg-white text-orange-800 border border-orange-200/70 shadow-sm"
+              >
+                {{ m.fullName }}
+                <span *ngIf="m.nickname" class="text-orange-400">({{ m.nickname }})</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="px-6 py-5 sm:px-8 overflow-x-auto">
+            <table class="w-full text-lg">
+              <thead>
+                <tr class="bg-gradient-to-r from-orange-100/80 to-amber-100/60 border-y border-orange-200/50">
+                  <th class="px-5 py-4 text-left font-extrabold text-orange-800 text-lg">ผู้ให้คะแนน</th>
+                  <th
+                    *ngFor="let c of progressData.criteria"
+                    class="px-5 py-4 text-center font-extrabold text-orange-800 text-lg"
+                  >
+                    {{ c.name }}
+                  </th>
+                  <th class="px-5 py-4 text-left font-extrabold text-orange-800 text-lg min-w-[200px]">ความคิดเห็น</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-orange-100/60">
+                <tr *ngFor="let gg of group.graderGrades" class="hover:bg-orange-50/40 transition-colors">
+                  <td class="px-5 py-5 font-bold text-lg text-slate-900">{{ gg.graderName }}</td>
+                  <td *ngFor="let g of gg.grades" class="px-5 py-5 text-center">
+                    <span
+                      *ngIf="g.score"
+                      class="inline-flex items-center justify-center w-12 h-12 rounded-xl font-black text-base text-white bg-gradient-to-r"
+                      [ngClass]="{
+                        'from-emerald-600 to-emerald-500': g.score === 'A' || g.score === 'B+',
+                        'from-blue-600 to-blue-500': g.score === 'B' || g.score === 'C+',
+                        'from-amber-600 to-amber-500': g.score === 'C' || g.score === 'D+',
+                        'from-red-600 to-red-500': g.score === 'D' || g.score === 'F'
+                      }"
+                    >
+                      {{ g.score }}
+                    </span>
+                    <span *ngIf="!g.score" class="text-orange-300 font-bold text-lg">-</span>
+                  </td>
+                  <td class="px-5 py-5 text-lg text-slate-600 font-medium max-w-xs">
+                    {{ gg.comment || '-' }}
+                  </td>
+                </tr>
+
+                <tr *ngIf="group.graderGrades.length === 0">
+                  <td [attr.colspan]="progressData.criteria.length + 2" class="px-5 py-10 text-center text-orange-300 text-lg font-semibold">
+                    ยังไม่มีการให้คะแนน
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="relative z-10 max-w-7xl mx-auto px-6 py-20 flex items-center justify-center">
+    <svg class="animate-spin h-10 w-10 text-orange-600" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+    </svg>
+    <span class="ml-4 text-xl font-semibold text-orange-700">Loading progress...</span>
+  </div>
+</div>

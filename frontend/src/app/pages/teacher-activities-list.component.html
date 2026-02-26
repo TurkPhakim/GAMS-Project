@@ -1,0 +1,246 @@
+<app-header></app-header>
+
+<div class="max-w-7xl mx-auto px-6 py-10">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h1 class="text-3xl sm:text-4xl font-black text-slate-900">กิจกรรม</h1>
+    <p class="mt-1 text-base text-slate-500">จัดการและให้คะแนนกิจกรรมของคุณ</p>
+  </div>
+
+  <!-- Search Bar + Create Button -->
+  <div class="mb-8 p-7 rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] relative overflow-hidden">
+    <div class="absolute -top-20 -right-20 w-80 h-80 bg-indigo-300/25 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-orange-300/25 rounded-full blur-3xl"></div>
+
+    <div class="relative flex items-center gap-5 flex-wrap">
+      <!-- Search Input -->
+      <div class="relative flex-1 min-w-[320px]">
+        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+          <svg class="h-8 w-8 text-slate-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange($event)"
+          placeholder="ค้นหาด้วยชื่อกิจกรรม"
+          class="w-full pl-14 pr-5 py-4 rounded-2xl text-lg bg-white/90 border border-white/70 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent"
+        />
+      </div>
+
+      <!-- Create Button -->
+      <button
+        [routerLink]="['/teacher/activities/create']"
+        class="relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl text-lg font-black text-white bg-gradient-to-r from-orange-600 to-orange-500 shadow-lg hover:shadow-xl hover:brightness-[1.02] active:scale-[0.99] transition overflow-hidden group whitespace-nowrap"
+      >
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        สร้างกิจกรรมใหม่
+      </button>
+    </div>
+  </div>
+
+  <!-- Total count (right-aligned) -->
+  <div class="mb-3 flex items-center justify-end">
+    <span class="text-base font-bold text-slate-500">
+      ทั้งหมด <span class="text-orange-600 font-extrabold">{{ pagination.total }}</span> กิจกรรม
+    </span>
+  </div>
+
+  <!-- Table -->
+  <div
+    *ngIf="!loading"
+    class="bg-white/70 backdrop-blur-xl rounded-3xl border border-white/60 shadow-xl overflow-hidden"
+  >
+    <div class="overflow-x-auto">
+      <table class="w-full text-base">
+        <!-- Header -->
+        <thead>
+          <tr class="bg-gradient-to-r from-orange-50 to-orange-100 text-slate-700">
+            <th class="px-8 py-4 text-left font-bold">ชื่อกิจกรรม</th>
+            <th class="px-8 py-4 text-center font-bold">วันเริ่มต้น</th>
+            <th class="px-8 py-4 text-center font-bold">วันสิ้นสุด</th>
+            <th class="px-8 py-4 text-center font-bold">ชั้นปี</th>
+            <th class="px-8 py-4 text-center font-bold">กลุ่ม</th>
+            <th class="px-8 py-4 text-center font-bold">จัดการ</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-slate-100">
+          <tr
+            *ngFor="let activity of activities"
+            class="hover:bg-orange-50/40 transition"
+          >
+            <!-- Title -->
+            <td class="px-8 py-6 font-semibold text-lg text-slate-800">
+              {{ activity.title }}
+            </td>
+
+            <!-- Start -->
+            <td class="px-8 py-6 text-center text-slate-600 font-medium">
+              {{ activity.startDate | date: "dd/MM/yyyy" }}
+            </td>
+
+            <!-- End -->
+            <td class="px-8 py-6 text-center text-slate-600 font-medium">
+              {{ activity.endDate | date: "dd/MM/yyyy" }}
+            </td>
+
+            <!-- Year Levels -->
+            <td class="px-8 py-6 text-center">
+              <div class="flex flex-wrap items-center justify-center gap-1.5">
+                <ng-container *ngIf="getYearLevels(activity).length > 0; else allYears">
+                  <span
+                    *ngFor="let yr of getYearLevels(activity)"
+                    class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-sm font-bold bg-indigo-100 text-indigo-700"
+                  >
+                    ปี {{ yr }}
+                  </span>
+                </ng-container>
+                <ng-template #allYears>
+                  <span class="text-slate-400 text-sm font-medium">ทุกชั้นปี</span>
+                </ng-template>
+              </div>
+            </td>
+
+            <!-- Groups -->
+            <td class="px-8 py-6 text-center">
+              <span
+                class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-orange-100 text-orange-700 font-bold text-lg"
+              >
+                {{ activity.groupCount || 0 }}
+              </span>
+            </td>
+
+            <!-- Actions -->
+            <td class="px-8 py-6 text-center">
+              <div class="flex items-center justify-center gap-3">
+                <!-- View Progress (eye) -->
+                <button
+                  [routerLink]="['/teacher/activities', activity.activityId, 'progress']"
+                  class="w-12 h-12 flex items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 hover:text-indigo-700 transition"
+                  title="ดูความคืบหน้า"
+                >
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                </button>
+
+                <!-- Grade -->
+                <button
+                  [routerLink]="['/teacher/grading', activity.activityId]"
+                  class="w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 text-white shadow-md hover:shadow-lg hover:brightness-110 transition"
+                  title="ให้คะแนน"
+                >
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414
+                         a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                </button>
+
+                <!-- Delete (only for creator) -->
+                <button
+                  *ngIf="activity.isCreator"
+                  (click)="deleteActivity(activity.activityId)"
+                  class="w-12 h-12 flex items-center justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 transition"
+                  title="ลบกิจกรรม"
+                >
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862
+                         a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6
+                         m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Empty -->
+          <tr *ngIf="activities.length === 0">
+            <td colspan="6" class="px-8 py-16 text-center">
+              <p class="text-lg text-slate-400 font-medium">
+                {{ searchQuery ? 'ไม่พบกิจกรรมที่ค้นหา' : 'ยังไม่มีกิจกรรม' }}
+              </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div
+      *ngIf="pagination.totalPages > 1"
+      class="px-8 py-6 border-t border-white/60 flex items-center justify-center gap-2.5 bg-white/60"
+    >
+      <!-- Previous -->
+      <button
+        (click)="onPageChange(currentPage - 1)"
+        [disabled]="currentPage === 1"
+        class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+        [class.bg-white]="currentPage !== 1"
+        [class.hover:bg-slate-50]="currentPage !== 1"
+        [class.text-slate-700]="currentPage !== 1"
+        [class.text-slate-300]="currentPage === 1"
+        [class.cursor-not-allowed]="currentPage === 1"
+        [class.bg-slate-50]="currentPage === 1"
+        [class.border-slate-200]="true"
+      >
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <!-- Page Numbers -->
+      <button
+        *ngFor="let page of getPageNumbers()"
+        (click)="onPageChange(page)"
+        class="px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+        [class.bg-gradient-to-r]="page === currentPage"
+        [class.from-orange-600]="page === currentPage"
+        [class.to-orange-500]="page === currentPage"
+        [class.text-white]="page === currentPage"
+        [class.border-orange-500]="page === currentPage"
+        [class.bg-white]="page !== currentPage"
+        [class.hover:bg-slate-50]="page !== currentPage"
+        [class.text-slate-700]="page !== currentPage"
+        [class.border-slate-200]="page !== currentPage"
+      >
+        {{ page }}
+      </button>
+
+      <!-- Next -->
+      <button
+        (click)="onPageChange(currentPage + 1)"
+        [disabled]="currentPage === pagination.totalPages"
+        class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+        [class.bg-white]="currentPage !== pagination.totalPages"
+        [class.hover:bg-slate-50]="currentPage !== pagination.totalPages"
+        [class.text-slate-700]="currentPage !== pagination.totalPages"
+        [class.text-slate-300]="currentPage === pagination.totalPages"
+        [class.cursor-not-allowed]="currentPage === pagination.totalPages"
+        [class.bg-slate-50]="currentPage === pagination.totalPages"
+        [class.border-slate-200]="true"
+      >
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="flex justify-center py-20">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+  </div>
+</div>

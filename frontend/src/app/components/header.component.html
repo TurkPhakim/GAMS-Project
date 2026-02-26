@@ -1,0 +1,256 @@
+<!-- Main Header -->
+<header
+  class="sticky top-0 z-30 bg-white/70 backdrop-blur-xl border-b border-white/70"
+>
+  <div
+    class="h-[3px] bg-gradient-to-r from-orange-500 via-primary-500 to-emerald-500"
+  ></div>
+
+  <div class="px-6 py-4">
+    <div class="flex justify-between items-center max-w-7xl mx-auto">
+      <!-- Left: Brand (clickable to home) -->
+      <button
+        (click)="goHome()"
+        type="button"
+        class="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity focus:outline-none"
+        title="กลับหน้าหลัก"
+      >
+        <div
+          class="w-20 h-20 rounded-full bg-white/90 border border-white/80 flex items-center justify-center"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-15 w-15 text-orange-600"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="9" y="2" width="6" height="4" rx="1"></rect>
+            <path
+              d="M9 4H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"
+            ></path>
+            <circle cx="12" cy="13" r="2"></circle>
+            <path d="M9 18a3 3 0 0 1 6 0"></path>
+          </svg>
+        </div>
+
+        <div class="leading-tight text-left">
+          <h1 class="text-3xl font-black tracking-tight">
+            <span
+              class="bg-clip-text text-transparent bg-gradient-to-r from-orange-600 via-orange-500 to-primary-600"
+            >
+              GAMS
+            </span>
+          </h1>
+          <p class="text-xl text-gray-500">
+            Group Assessment Management System
+          </p>
+        </div>
+      </button>
+
+      <!-- Right: User + Logout -->
+      <div class="flex items-center" *ngIf="currentUser">
+        <div
+          class="flex items-center gap-3 rounded-full bg-white/75 border border-white/80 p-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-8 w-8 text-orange-600"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+
+          <span class="text-xl font-semibold text-gray-800">
+            {{ getUserDisplayName() }}
+          </span>
+        </div>
+
+        <button
+          (click)="logout()"
+          type="button"
+          title="Logout"
+          class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/75 border border-white/80 text-orange-600 hover:text-orange-700 hover:bg-white/90 transition"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-10 w-10"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Breadcrumb Bar -->
+<div
+  *ngIf="breadcrumbs.length > 0 || buttons.length > 0"
+  class="bg-white/60 backdrop-blur-xl border-b border-white/70"
+>
+  <div class="px-6 py-3 lg:py-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <!-- Breadcrumb Navigation -->
+      <nav
+        class="flex items-center gap-2 lg:gap-3 text-sm lg:text-lg"
+        *ngIf="breadcrumbs.length > 0"
+      >
+        <div
+          *ngFor="let item of breadcrumbs; let last = last"
+          class="flex items-center gap-2 lg:gap-3"
+        >
+          <button
+            *ngIf="item.route"
+            (click)="navigateTo(item.route)"
+            class="text-primary-700 hover:text-primary-900 font-semibold inline-flex items-center gap-1.5 lg:gap-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4 lg:h-6 lg:w-6"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            {{ item.label }}
+          </button>
+
+          <span *ngIf="!item.route" class="text-gray-700 font-semibold">
+            {{ item.label }}
+          </span>
+
+          <svg
+            *ngIf="!last"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 lg:h-6 lg:w-6 text-gray-400"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+      </nav>
+
+      <div *ngIf="breadcrumbs.length === 0"></div>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-2 lg:gap-3 items-center" *ngIf="buttons.length > 0">
+        <button
+          *ngFor="let btn of buttons"
+          (click)="executeButtonAction(btn.action)"
+          type="button"
+          class="group relative inline-flex items-center justify-center overflow-hidden rounded-xl px-4 lg:px-6 py-2 lg:py-2.5 font-semibold transition"
+          [ngClass]="getButtonClasses(btn)"
+        >
+          <span
+            *ngIf="!isOutline(btn)"
+            class="pointer-events-none absolute -left-16 top-0 h-full w-14 rotate-12 bg-white/25 blur-sm translate-x-0 group-hover:translate-x-[420px] transition duration-700"
+          ></span>
+
+          <!-- content -->
+          <span class="relative inline-flex items-center gap-2 lg:gap-2.5">
+            <!-- icon -->
+            <ng-container [ngSwitch]="getButtonIcon(btn)">
+              <!-- back -->
+              <svg
+                *ngSwitchCase="'back'"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 lg:h-5 lg:w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M15 19l-7-7 7-7" />
+              </svg>
+
+              <!-- save -->
+              <svg
+                *ngSwitchCase="'save'"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 lg:h-5 lg:w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M19 21H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h11l5 5v9a2 2 0 0 1-2 2z"
+                />
+                <path d="M17 21v-8H7v8" />
+                <path d="M7 3v4h8" />
+              </svg>
+
+              <!-- danger -->
+              <svg
+                *ngSwitchCase="'danger'"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 lg:h-5 lg:w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 9v4" />
+                <path d="M12 17h.01" />
+                <path
+                  d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                />
+              </svg>
+
+              <!-- default -->
+              <svg
+                *ngSwitchDefault
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 lg:h-5 lg:w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 5l7 7-7 7" />
+              </svg>
+            </ng-container>
+
+            <span class="text-sm lg:text-base">{{ btn.label }}</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

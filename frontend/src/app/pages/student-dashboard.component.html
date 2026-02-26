@@ -1,0 +1,552 @@
+<app-header></app-header>
+
+<div
+  class="min-h-[calc(100vh-64px)] bg-[radial-gradient(1200px_600px_at_10%_10%,rgba(255,153,51,0.18),transparent),radial-gradient(900px_500px_at_90%_20%,rgba(59,130,246,0.16),transparent),radial-gradient(900px_500px_at_50%_100%,rgba(16,185,129,0.10),transparent)] relative overflow-hidden"
+>
+  <div
+    class="absolute inset-0 opacity-[0.06] bg-[linear-gradient(to_right,rgba(0,0,0,0.2)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.2)_1px,transparent_1px)] bg-[size:28px_28px]"
+  ></div>
+
+  <div
+    class="absolute -top-28 -right-28 w-[420px] h-[420px] bg-primary-200/35 rounded-full blur-3xl"
+  ></div>
+  <div
+    class="absolute -bottom-32 -left-32 w-[420px] h-[420px] bg-orange-200/45 rounded-full blur-3xl"
+  ></div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <!-- Page header -->
+    <div class="mb-8">
+      <h1 class="text-5xl font-black tracking-tight text-gray-900">
+        My Score Dashboard
+      </h1>
+      <p class="text-xl text-gray-700 mt-4 font-medium">
+        สรุปกิจกรรม คะแนน และรายละเอียดการประเมิน
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-7 mb-10">
+      <div
+        class="relative rounded-3xl border border-white/60 overflow-hidden p-7 bg-gradient-to-br from-orange-200/85 via-orange-100/70 to-white/60 backdrop-blur-xl"
+      >
+        <div
+          class="absolute -top-24 -right-24 w-56 h-56 bg-orange-500/25 rounded-full blur-2xl"
+        ></div>
+        <div
+          class="absolute -bottom-28 -left-28 w-64 h-64 bg-orange-600/15 rounded-full blur-2xl"
+        ></div>
+
+        <div class="relative flex items-start justify-between">
+          <div>
+            <div
+              class="flex items-center gap-3 text-lg font-bold text-gray-900"
+            >
+              <svg
+                class="w-7 h-7 text-orange-700"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"
+                />
+              </svg>
+              Total Activities
+            </div>
+
+            <div class="text-5xl font-black text-gray-900 mt-3">
+              {{ stats.totalActivities }}
+            </div>
+          </div>
+
+          <div class="rounded-2xl bg-white/85 border border-white/70 p-4">
+            <svg
+              class="w-10 h-10 text-orange-700"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div class="relative mt-6 flex items-center w-full">
+          <span
+            class="flex-1 h-[4px] bg-gradient-to-r from-orange-700 to-orange-500 rounded-full"
+          ></span>
+          <span class="mx-3 w-3.5 h-3.5 bg-orange-600 rounded-full"></span>
+          <span
+            class="flex-1 h-[4px] bg-gradient-to-r from-orange-500 to-orange-700 rounded-full"
+          ></span>
+        </div>
+      </div>
+
+      <div
+        class="relative rounded-3xl border border-white/60 overflow-hidden p-7 bg-gradient-to-br from-emerald-200/85 via-emerald-100/70 to-white/60 backdrop-blur-xl"
+      >
+        <div
+          class="absolute -top-24 -right-24 w-56 h-56 bg-emerald-500/22 rounded-full blur-2xl"
+        ></div>
+        <div
+          class="absolute -bottom-28 -left-28 w-64 h-64 bg-emerald-700/14 rounded-full blur-2xl"
+        ></div>
+
+        <div class="relative flex items-start justify-between">
+          <div>
+            <div
+              class="flex items-center gap-3 text-lg font-bold text-gray-900"
+            >
+              <svg
+                class="w-7 h-7 text-emerald-700"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              Activities Graded
+            </div>
+
+            <div class="text-5xl font-black text-gray-900 mt-3">
+              {{ stats.gradedActivities }}
+            </div>
+          </div>
+
+          <div class="rounded-2xl bg-white/85 border border-white/70 p-4">
+            <svg
+              class="w-10 h-10 text-emerald-700"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div class="relative mt-6 flex items-center w-full">
+          <span
+            class="flex-1 h-[4px] bg-gradient-to-r from-emerald-800 to-emerald-500 rounded-full"
+          ></span>
+          <span class="mx-3 w-3.5 h-3.5 bg-emerald-700 rounded-full"></span>
+          <span
+            class="flex-1 h-[4px] bg-gradient-to-r from-emerald-500 to-emerald-800 rounded-full"
+          ></span>
+        </div>
+      </div>
+
+      <div
+        class="relative rounded-3xl border border-white/60 overflow-hidden p-7 bg-gradient-to-br from-amber-200/85 via-amber-100/70 to-white/60 backdrop-blur-xl"
+      >
+        <div
+          class="absolute -top-24 -right-24 w-56 h-56 bg-amber-500/22 rounded-full blur-2xl"
+        ></div>
+        <div
+          class="absolute -bottom-28 -left-28 w-64 h-64 bg-amber-700/12 rounded-full blur-2xl"
+        ></div>
+
+        <div class="relative flex items-start justify-between">
+          <div>
+            <div
+              class="flex items-center gap-3 text-lg font-bold text-gray-900"
+            >
+              <svg
+                class="w-7 h-7 text-amber-800"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14"
+                />
+              </svg>
+              GPA เฉลี่ย
+            </div>
+
+            <div class="text-5xl font-black text-gray-900 mt-3">
+              {{ stats.averageScore.toFixed(2) }}
+            </div>
+          </div>
+
+          <div class="rounded-2xl bg-white/85 border border-white/70 p-4">
+            <svg
+              class="w-10 h-10 text-amber-800"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4 19h16M7 16V8m5 8V5m5 11v-6"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div class="relative mt-6 flex items-center w-full">
+          <span
+            class="flex-1 h-[4px] bg-gradient-to-r from-amber-900 to-amber-600 rounded-full"
+          ></span>
+          <span class="mx-3 w-3.5 h-3.5 bg-amber-800 rounded-full"></span>
+          <span
+            class="flex-1 h-[4px] bg-gradient-to-r from-amber-600 to-amber-900 rounded-full"
+          ></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="flex items-center justify-center py-16">
+      <svg
+        class="animate-spin h-10 w-10 text-primary-700"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+        ></path>
+      </svg>
+      <span class="ml-4 text-lg font-semibold text-gray-700">
+        Loading dashboard...
+      </span>
+    </div>
+
+    <div
+      *ngIf="!loading"
+      class="relative overflow-hidden rounded-3xl border border-white/60 bg-white/70 backdrop-blur-xl"
+    >
+      <div
+        class="relative px-7 py-6 sm:px-8 sm:py-7 bg-gradient-to-r from-slate-900 via-slate-900 to-slate-800 text-white"
+      >
+        <div
+          class="absolute -top-20 -right-20 w-64 h-64 bg-orange-500/20 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute -bottom-24 -left-24 w-72 h-72 bg-primary-500/15 rounded-full blur-3xl"
+        ></div>
+
+        <div class="relative flex items-start justify-between gap-4">
+          <div class="flex items-start gap-4">
+            <div
+              class="shrink-0 w-16 h-16 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-10 h-10 text-orange-300"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 3v18h18" />
+                <path d="M7 14l3-3 3 2 4-6" />
+              </svg>
+            </div>
+
+            <div>
+              <h2 class="text-2xl sm:text-3xl font-black tracking-tight">
+                My Grades by Activity
+              </h2>
+              <p class="mt-1 text-lg sm:text-lg text-white/75">
+                Summary of scores and status for each activity
+              </p>
+
+              <div class="mt-4 flex items-center w-full max-w-xl">
+                <span
+                  class="flex-1 h-[3px] bg-gradient-to-r from-orange-500 to-primary-500 rounded-full"
+                ></span>
+                <span class="mx-3 w-3 h-3 bg-orange-500 rounded-full"></span>
+                <span
+                  class="flex-1 h-[3px] bg-gradient-to-r from-primary-500 to-orange-500 rounded-full"
+                ></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- small chip -->
+          <div
+            class="hidden sm:inline-flex items-center gap-2 rounded-full px-4 py-2 bg-white/10 border border-white/15 text-white/90 text-sm font-semibold"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5 text-emerald-300"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+            Last Updated
+          </div>
+        </div>
+      </div>
+
+      <!-- content -->
+      <div class="px-6 py-6 sm:px-8 sm:py-7">
+        <div *ngIf="activities.length > 0" class="overflow-x-auto">
+          <table class="w-full text-base sm:text-lg">
+            <thead>
+              <tr class="bg-slate-50/90 border-y border-slate-200/70">
+                <th
+                  class="px-6 py-4 text-left font-extrabold text-slate-700 tracking-wide"
+                >
+                  กิจกรรม
+                </th>
+                <th
+                  class="px-6 py-4 text-left font-extrabold text-slate-700 tracking-wide"
+                >
+                  กลุ่ม
+                </th>
+                <th
+                  class="px-6 py-4 text-center font-extrabold text-slate-700 tracking-wide"
+                >
+                  GPA
+                </th>
+                <th
+                  class="px-6 py-4 text-center font-extrabold text-slate-700 tracking-wide"
+                >
+                  เกรด
+                </th>
+                <th
+                  class="px-6 py-4 text-center font-extrabold text-slate-700 tracking-wide"
+                >
+                  สถานะ
+                </th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y divide-slate-100">
+              <tr
+                *ngFor="let a of activities"
+                class="hover:bg-orange-50/30 transition-colors"
+              >
+                <td class="px-6 py-5 font-bold text-slate-900">
+                  {{ a.activityName }}
+                </td>
+                <td class="px-6 py-5 text-slate-600 font-semibold">
+                  {{ a.groupName }}
+                </td>
+
+                <td class="px-6 py-5 text-center font-black text-slate-900">
+                  {{ a.score !== null ? a.score.toFixed(2) : "-" }}
+                </td>
+
+                <td class="px-6 py-5 text-center">
+                  <span
+                    *ngIf="a.finalGrade"
+                    class="inline-flex items-center justify-center min-w-[56px] px-4 py-2 rounded-2xl font-black text-xl text-white bg-gradient-to-r"
+                    [ngClass]="getGradeBg(a.finalGrade)"
+                  >
+                    {{ a.finalGrade }}
+                  </span>
+                  <span *ngIf="!a.finalGrade" class="text-slate-400 font-bold"
+                    >-</span
+                  >
+                </td>
+
+                <td class="px-6 py-5 text-center">
+                  <span
+                    *ngIf="a.status === 'Graded'"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm sm:text-base font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-5 h-5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                    Graded
+                  </span>
+
+                  <span
+                    *ngIf="a.status !== 'Graded'"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm sm:text-base font-extrabold bg-amber-100 text-amber-900 border border-amber-200"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-5 h-5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M12 8v4l3 3" />
+                      <path d="M21 12a9 9 0 1 1-18 0a9 9 0 0 1 18 0Z" />
+                    </svg>
+                    Pending
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- empty -->
+        <div *ngIf="activities.length === 0" class="text-center py-14">
+          <div
+            class="mx-auto w-16 h-16 rounded-2xl bg-orange-100 border border-orange-200 flex items-center justify-center mb-4"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-10 h-10 text-orange-600"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 3v18h18" />
+              <path d="M7 14l3-3 3 2 4-6" />
+            </svg>
+          </div>
+          <p class="text-base sm:text-lg font-semibold text-slate-600">
+            No grade information found
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Details title -->
+    <div *ngIf="!loading && activities?.length" class="mt-12">
+      <h2 class="text-3xl font-black text-gray-900 mb-7">คะแนนละเอียด</h2>
+
+      <!-- Activities loop -->
+      <div
+        *ngFor="let a of activities"
+        class="relative rounded-3xl border border-gray-300 bg-white shadow-xl p-8 mb-8"
+      >
+        <!-- Header -->
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <h3 class="text-2xl font-black text-gray-900">
+              {{ a.activityName }}
+            </h3>
+            <p class="text-lg font-semibold text-gray-700">
+              กลุ่ม: {{ a.groupName }}
+            </p>
+          </div>
+
+          <!-- Final Grade -->
+          <div *ngIf="a.finalGrade" class="text-right">
+            <div class="text-xs font-bold text-gray-500 uppercase">เกรดรวม</div>
+            <div
+              class="text-5xl font-black"
+              [ngClass]="getGradeColor(a.finalGrade)"
+            >
+              {{ a.finalGrade }}
+            </div>
+            <div class="text-sm font-bold text-gray-400 mt-1">
+              GPA {{ a.score?.toFixed(2) }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Criteria (3 per row) -->
+        <div
+          *ngIf="a.criteriaScores?.length"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
+        >
+          <div
+            *ngFor="let cs of a.criteriaScores"
+            class="relative overflow-hidden rounded-2xl p-6 border border-white/60 bg-gradient-to-br from-amber-200/75 via-orange-100/65 to-white/55 shadow-[0_18px_48px_-28px_rgba(0,0,0,0.35)]"
+          >
+            <div
+              class="absolute -top-10 -right-10 w-28 h-28 bg-amber-500/18 rounded-full blur-2xl"
+            ></div>
+            <div
+              class="absolute -bottom-12 -left-12 w-32 h-32 bg-orange-600/12 rounded-full blur-2xl"
+            ></div>
+
+            <div class="relative">
+              <div class="text-base font-black text-gray-900 mb-2">
+                {{ cs.name }}
+              </div>
+
+              <div class="text-3xl font-black text-gray-900">
+                GPA {{ cs.averageScore !== null && cs.averageScore !== undefined ? cs.averageScore : "-" }}
+              </div>
+
+              <div *ngIf="cs.grade" class="mt-2 font-semibold text-gray-800">
+                เกรด:
+                <span class="font-black" [ngClass]="getGradeColor(cs.grade)">
+                  {{ cs.grade }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comments -->
+        <div *ngIf="a.comments?.length" class="border-t pt-6">
+          <h4 class="font-bold text-gray-800 mb-4">ความคิดเห็นจากอาจารย์</h4>
+
+          <div
+            *ngFor="let c of a.comments"
+            class="bg-gray-50 border border-gray-200 rounded-2xl p-4 mb-3"
+          >
+            <div class="font-bold text-gray-900">
+              {{ c.teacherName }}
+            </div>
+            <div class="text-gray-800">
+              {{ c.comment }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending -->
+        <div *ngIf="a.status === 'Pending'" class="text-center py-6">
+          <p class="text-amber-700 font-bold text-lg">Awaiting grading...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

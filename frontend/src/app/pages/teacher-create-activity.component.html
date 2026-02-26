@@ -1,0 +1,444 @@
+<app-header></app-header>
+
+<div class="max-w-7xl mx-auto px-6 py-8">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h1 class="text-3xl sm:text-4xl font-black text-slate-900">
+      สร้างกิจกรรมใหม่
+    </h1>
+    <p class="mt-4 text-base text-slate-600">
+      ตั้งค่ารายละเอียดกิจกรรม เกณฑ์การให้คะแนน ผู้ให้คะแนน
+      และชั้นปีที่เปิดให้ลง
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- ================== Column 1: Activity Details ================== -->
+    <div
+      class="rounded-3xl bg-white/65 backdrop-blur-xl border border-white/60 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] p-6 sm:p-7 relative overflow-hidden"
+    >
+      <div
+        class="absolute -top-20 -right-20 w-72 h-72 bg-orange-300/20 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute -bottom-20 -left-20 w-72 h-72 bg-indigo-300/20 rounded-full blur-3xl"
+      ></div>
+
+      <div class="relative flex items-center gap-4 mb-6">
+        <div
+          class="w-12 h-12 rounded-2xl bg-white/70 border border-white/60 ring-1 ring-black/5 shadow-sm flex items-center justify-center"
+        >
+          <svg
+            class="w-8 h-8 text-orange-600"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+            />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-black text-slate-900">รายละเอียดกิจกรรม</h2>
+      </div>
+
+      <form [formGroup]="activityForm" class="relative space-y-6">
+        <div>
+          <label
+            class="block text-lg font-black text-slate-800 tracking-wide mb-2"
+            >ชื่อกิจกรรม</label
+          >
+          <input
+            type="text"
+            formControlName="title"
+            class="w-full px-5 py-4 rounded-2xl text-base bg-white/90 border border-white/70 ring-1 ring-black/5 shadow-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition"
+            placeholder="ชื่อกิจกรรม"
+          />
+        </div>
+
+        <div>
+          <label
+            class="block text-lg font-black text-slate-800 tracking-wide mb-2"
+            >รายละเอียดกิจกรรม</label
+          >
+          <textarea
+            formControlName="description"
+            class="w-full px-5 py-4 rounded-2xl text-base bg-white/90 border border-white/70 ring-1 ring-black/5 shadow-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition"
+            rows="4"
+            placeholder="รายละเอียดกิจกรรม"
+          ></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label
+              class="block text-lg font-black text-slate-800 tracking-wide mb-2"
+              >วันเริ่มต้น</label
+            >
+            <input
+              type="datetime-local"
+              formControlName="startDate"
+              class="w-full px-5 py-4 rounded-2xl text-base bg-white/90 border border-white/70 ring-1 ring-black/5 shadow-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition"
+            />
+          </div>
+
+          <div>
+            <label
+              class="block text-lg font-black text-slate-800 tracking-wide mb-2"
+              >วันสิ้นสุด</label
+            >
+            <input
+              type="datetime-local"
+              formControlName="endDate"
+              class="w-full px-5 py-4 rounded-2xl text-base bg-white/90 border border-white/70 ring-1 ring-black/5 shadow-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition"
+            />
+          </div>
+        </div>
+      </form>
+
+    </div>
+
+    <!-- ================== Column 2: Grading Criteria ================== -->
+    <div
+      class="rounded-3xl bg-white/65 backdrop-blur-xl border border-white/60 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] p-6 sm:p-7 relative overflow-hidden"
+    >
+      <div
+        class="absolute -top-20 -right-20 w-72 h-72 bg-orange-300/20 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute -bottom-20 -left-20 w-72 h-72 bg-indigo-300/20 rounded-full blur-3xl"
+      ></div>
+
+      <div class="relative flex items-center gap-4 mb-6">
+        <div
+          class="w-12 h-12 rounded-2xl bg-white/70 border border-white/60 ring-1 ring-black/5 shadow-sm flex items-center justify-center"
+        >
+          <svg
+            class="w-8 h-8 text-indigo-600"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+            />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-black text-slate-900">เกณฑ์การให้คะแนน</h2>
+      </div>
+
+      <p class="text-base sm:text-base text-slate-600 mb-5">
+        แต่ละเกณฑ์จะถูกให้คะแนนด้วย :
+        <span class="font-semibold text-orange-500"
+          >S, A+, A, B+, B, C+, C, D+, D, F</span
+        >
+      </p>
+
+      <!-- Add criteria input -->
+      <div class="flex flex-col sm:flex-row gap-3 mb-6">
+        <input
+          type="text"
+          [(ngModel)]="newCriteriaName"
+          (keyup.enter)="addCriteria()"
+          class="flex-1 px-5 py-4 rounded-2xl text-base bg-white/90 border border-white/70 ring-1 ring-black/5 shadow-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition"
+          placeholder="กำหนดเกณฑ์การให้คะแนน"
+        />
+
+        <button
+          (click)="addCriteria()"
+          [disabled]="!newCriteriaName.trim()"
+          class="relative inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl text-base font-black text-white bg-gradient-to-r from-orange-600 to-orange-500 shadow-lg hover:shadow-xl hover:brightness-[1.02] active:scale-[0.99] transition overflow-hidden group disabled:from-slate-300 disabled:to-slate-300 disabled:shadow-none disabled:cursor-not-allowed"
+        >
+          <span
+            class="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-white/15"
+          ></span>
+          <svg
+            class="w-7 h-7 relative z-10"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          <span class="relative z-10">เพิ่ม</span>
+        </button>
+      </div>
+
+      <!-- Criteria List -->
+      <div *ngIf="criteriaList.length > 0" class="space-y-3">
+        <h3 class="text-lg font-black text-slate-800">
+          เกณฑ์ที่เพิ่มแล้ว ({{ criteriaList.length }})
+        </h3>
+
+        <div
+          *ngFor="let name of criteriaList; let i = index"
+          class="flex items-center justify-between p-4 rounded-2xl bg-white/70 border border-white/60 ring-1 ring-black/5 shadow-sm"
+        >
+          <div class="flex items-center gap-3 min-w-0">
+            <span
+              class="w-9 h-9 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-sm font-black flex-shrink-0"
+              >{{ i + 1 }}</span
+            >
+            <span class="text-base font-semibold text-slate-900 truncate">
+              {{ name }}
+            </span>
+          </div>
+
+          <button
+            (click)="removeCriteria(i)"
+            class="p-2.5 rounded-2xl text-red-600 hover:bg-red-50 transition"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div
+        *ngIf="criteriaList.length === 0"
+        class="p-5 rounded-2xl bg-amber-50/80 border border-amber-100 text-amber-800 flex items-center justify-center gap-3"
+      >
+        <svg
+          class="w-8 h-8 text-amber-500 flex-shrink-0"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+          />
+        </svg>
+        <span class="text-lg font-semibold"
+          >กรุณาเพิ่มเกณฑ์อย่างน้อย 1 ข้อ</span
+        >
+      </div>
+    </div>
+
+    <!-- ================== Column 3: Graders ================== -->
+    <div
+      class="rounded-3xl bg-white/65 backdrop-blur-xl border border-white/60 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] p-6 sm:p-7 relative overflow-hidden"
+    >
+      <div
+        class="absolute -top-20 -right-20 w-72 h-72 bg-orange-300/20 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute -bottom-20 -left-20 w-72 h-72 bg-indigo-300/20 rounded-full blur-3xl"
+      ></div>
+
+      <div class="relative flex items-center gap-4 mb-6">
+        <div
+          class="w-12 h-12 rounded-2xl bg-white/70 border border-white/60 ring-1 ring-black/5 shadow-sm flex items-center justify-center"
+        >
+          <svg
+            class="w-8 h-8 text-violet-600"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+            />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-black text-slate-900">เลือกผู้ให้คะแนน</h2>
+      </div>
+
+      <p class="text-base text-slate-600 mb-5">
+        เลือกอาจารย์เพิ่มเติมเพื่อช่วยให้คะแนนกิจกรรมนี้
+      </p>
+
+      <div *ngIf="allTeachers.length > 0" class="space-y-3">
+        <div
+          *ngFor="let teacher of allTeachers"
+          (click)="toggleGrader(teacher.teacherId)"
+          class="flex items-center gap-4 p-4 rounded-2xl border cursor-pointer transition-all ring-1 ring-black/5"
+          [ngClass]="
+            isGraderSelected(teacher.teacherId)
+              ? 'border-orange-200 bg-orange-50/60'
+              : 'border-white/60 bg-white/70 hover:bg-white/85'
+          "
+        >
+          <!-- Checkbox indicator -->
+          <div
+            class="w-7 h-7 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors"
+            [ngClass]="
+              isGraderSelected(teacher.teacherId)
+                ? 'bg-orange-600'
+                : 'border-2 border-slate-300 bg-white'
+            "
+          >
+            <svg
+              *ngIf="isGraderSelected(teacher.teacherId)"
+              class="w-4 h-4 text-white"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+
+          <div class="min-w-0">
+            <p class="text-md font-black text-slate-900 truncate">
+              {{ teacher.fullName }}
+            </p>
+            <p class="text-base text-slate-500 truncate">
+              {{ teacher.email }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        *ngIf="allTeachers.length === 0"
+        class="p-5 rounded-2xl bg-white/70 border border-white/60 text-center"
+      >
+        <p class="text-base font-semibold text-slate-600">
+          ไม่มีอาจารย์ท่านอื่น
+        </p>
+      </div>
+
+      <div
+        *ngIf="selectedGraders.length > 0"
+        class="mt-5 pt-5 border-t border-white/60"
+      >
+        <p class="text-base text-slate-600">
+          เลือกผู้ให้คะแนนเพิ่มเติม
+          <span class="font-black text-slate-900">{{
+            selectedGraders.length
+          }}</span>
+          คน
+        </p>
+      </div>
+    </div>
+
+    <!-- ================== Column 4: Target Year Levels ================== -->
+    <div
+      class="rounded-3xl bg-white/65 backdrop-blur-xl border border-white/60 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] p-6 sm:p-7 relative overflow-hidden"
+    >
+      <div
+        class="absolute -top-20 -right-20 w-72 h-72 bg-orange-300/20 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute -bottom-20 -left-20 w-72 h-72 bg-indigo-300/20 rounded-full blur-3xl"
+      ></div>
+
+      <div class="relative flex items-center gap-4 mb-6">
+        <div
+          class="w-12 h-12 rounded-2xl bg-white/70 border border-white/60 ring-1 ring-black/5 shadow-sm flex items-center justify-center"
+        >
+          <svg
+            class="w-8 h-8 text-orange-600"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 14l9-5-9-5-9 5 9 5z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
+            />
+          </svg>
+        </div>
+
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900">
+          ชั้นปีที่เปิดให้ลงทะเบียน
+        </h2>
+      </div>
+
+      <p class="text-base text-slate-600 mb-5">
+        เลือกชั้นปีที่สามารถลงทะเบียนกิจกรรมนี้ได้
+      </p>
+
+      <div class="space-y-3">
+        <div
+          *ngFor="let year of yearLevelOptions"
+          (click)="toggleYearLevel(year)"
+          class="flex items-center gap-4 p-4 rounded-2xl border cursor-pointer transition-all ring-1 ring-black/5"
+          [ngClass]="
+            isYearLevelSelected(year)
+              ? 'border-orange-200 bg-orange-50/60'
+              : 'border-white/60 bg-white/70 hover:bg-white/85'
+          "
+        >
+          <div
+            class="w-7 h-7 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors"
+            [ngClass]="
+              isYearLevelSelected(year)
+                ? 'bg-orange-600'
+                : 'border-2 border-slate-300 bg-white'
+            "
+          >
+            <svg
+              *ngIf="isYearLevelSelected(year)"
+              class="w-4 h-4 text-white"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+
+          <p class="text-base font-black text-slate-900">
+            ชั้นปีที่ {{ year }}
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-5 pt-5 border-t border-white/60">
+        <p class="text-base text-slate-600">
+          เลือกแล้ว
+          <span class="font-black text-slate-900">{{
+            selectedYearLevels.length
+          }}</span>
+          ชั้นปี
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1456 @@
+<app-header></app-header>
+
+<div
+  class="min-h-[calc(100vh-64px)] bg-[radial-gradient(1200px_600px_at_10%_10%,rgba(255,153,51,0.18),transparent),radial-gradient(900px_500px_at_90%_20%,rgba(59,130,246,0.16),transparent),radial-gradient(900px_500px_at_50%_100%,rgba(16,185,129,0.10),transparent)] relative overflow-hidden"
+>
+  <div
+    class="absolute inset-0 opacity-[0.06] bg-[linear-gradient(to_right,rgba(0,0,0,0.2)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.2)_1px,transparent_1px)] bg-[size:28px_28px]"
+  ></div>
+
+  <div
+    class="absolute -top-28 -right-28 w-[420px] h-[420px] bg-primary-200/35 rounded-full blur-3xl"
+  ></div>
+  <div
+    class="absolute -bottom-32 -left-32 w-[420px] h-[420px] bg-orange-200/45 rounded-full blur-3xl"
+  ></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <div class="mb-8">
+      <h1 class="text-4xl font-black tracking-tight text-gray-900">
+        Admin Management
+      </h1>
+      <p class="mt-4 text-xl text-gray-700">
+        จัดการรายชื่อนักศึกษา อาจารย์ และกิจกรรมในระบบ
+      </p>
+    </div>
+
+    <!-- Tabs -->
+    <div
+      class="inline-flex items-center rounded-3xl p-3 mb-10 bg-white/65 backdrop-blur-xl border border-white/60 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)]"
+    >
+      <!-- Students -->
+      <button
+        (click)="switchSection('students')"
+        class="group inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-base font-bold transition focus:outline-none"
+        [class.bg-white]="activeSection === 'students'"
+        [class.shadow-md]="activeSection === 'students'"
+        [class.text-slate-900]="activeSection === 'students'"
+        [class.text-slate-600]="activeSection !== 'students'"
+      >
+        <span
+          class="grid place-items-center h-10 w-10 rounded-2xl bg-white/80 border border-white/60"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-8 w-8"
+            [class.text-orange-600]="activeSection === 'students'"
+            [class.text-slate-500]="activeSection !== 'students'"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+          </svg>
+        </span>
+        นักศึกษา
+      </button>
+
+      <!-- Teachers -->
+      <button
+        (click)="switchSection('teachers')"
+        class="group inline-flex items-center gap-3 px-6 py-3 rounded-2xl text-base font-bold transition focus:outline-none"
+        [class.bg-white]="activeSection === 'teachers'"
+        [class.shadow-md]="activeSection === 'teachers'"
+        [class.text-slate-900]="activeSection === 'teachers'"
+        [class.text-slate-600]="activeSection !== 'teachers'"
+      >
+        <span
+          class="grid place-items-center h-10 w-10 rounded-2xl bg-white/80 border border-white/60"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-8 w-8"
+            [class.text-orange-600]="activeSection === 'teachers'"
+            [class.text-slate-500]="activeSection !== 'teachers'"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+            />
+          </svg>
+        </span>
+        อาจารย์
+      </button>
+
+      <!-- Activities -->
+      <button
+        (click)="switchSection('activities')"
+        class="group inline-flex items-center gap-3 px-6 py-3 rounded-2xl text-base font-bold transition focus:outline-none"
+        [class.bg-white]="activeSection === 'activities'"
+        [class.shadow-md]="activeSection === 'activities'"
+        [class.text-slate-900]="activeSection === 'activities'"
+        [class.text-slate-600]="activeSection !== 'activities'"
+      >
+        <span
+          class="grid place-items-center h-10 w-10 rounded-2xl bg-white/80 border border-white/60"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-8 w-8"
+            [class.text-orange-600]="activeSection === 'activities'"
+            [class.text-slate-500]="activeSection !== 'activities'"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+            />
+          </svg>
+        </span>
+        กิจกรรม
+      </button>
+    </div>
+
+    <!-- ==================== STUDENTS SECTION ==================== -->
+    <div *ngIf="activeSection === 'students'">
+      <!-- Search + Create -->
+      <div
+        class="mb-8 p-7 rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] relative overflow-hidden"
+      >
+        <div
+          class="absolute -top-20 -right-20 w-80 h-80 bg-indigo-300/25 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute -bottom-20 -left-20 w-80 h-80 bg-orange-300/25 rounded-full blur-3xl"
+        ></div>
+
+        <div class="relative flex items-center gap-5 flex-wrap">
+          <div class="relative flex-1 min-w-[320px]">
+            <div
+              class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-slate-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+
+            <input
+              type="text"
+              [(ngModel)]="searchStudentQuery"
+              (ngModelChange)="onStudentSearchChange($event)"
+              placeholder="ค้นหาด้วยรหัสและชื่อนักศึกษา"
+              class="w-full pl-14 pr-5 py-4 rounded-2xl text-lg bg-white/90 border border-white/70 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent"
+            />
+          </div>
+
+          <button
+            (click)="openCreateStudentDialog()"
+            class="relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl text-lg font-black text-white bg-gradient-to-r from-orange-600 to-orange-500 shadow-lg hover:shadow-xl hover:brightness-[1.02] active:scale-[0.99] transition overflow-hidden group whitespace-nowrap"
+          >
+            <span
+              class="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-white/15"
+            ></span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-7 w-7 relative z-10"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            <span class="relative z-10">เพิ่มรายชื่อนักศึกษา</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ==================== YEAR PANELS ==================== -->
+      <div class="grid grid-cols-1 gap-8">
+        <div
+          *ngFor="let year of getStudentYearLevels()"
+          class="rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] overflow-hidden relative"
+        >
+          <div
+            class="absolute -top-28 -right-28 w-96 h-96 bg-indigo-300/18 rounded-full blur-3xl"
+          ></div>
+
+          <!-- Panel Header -->
+          <div
+            class="relative flex items-center justify-between px-8 py-6 border-b border-white/60 bg-gradient-to-r from-orange-50/95 via-white/70 to-white/50"
+          >
+            <div class="flex items-center gap-4">
+              <h3 class="text-2xl font-black tracking-wide text-orange-700">
+                {{ getYearLabel(year) }}
+              </h3>
+
+              <span
+                class="text-lg font-extrabold text-slate-800 bg-white/85 border border-white/70 px-4 py-2 rounded-full"
+              >
+                {{
+                  studentPagination[year]?.total ||
+                    studentsByYear[year]?.length ||
+                    0
+                }}
+                คน
+              </span>
+
+              <div class="hidden md:flex items-center gap-2 ml-1">
+                <div
+                  class="h-2 w-16 rounded-full bg-gradient-to-r from-orange-500 to-indigo-500"
+                ></div>
+                <div class="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <!-- Promote -->
+              <button
+                (click)="promoteYear(year)"
+                class="p-3.5 rounded-2xl text-indigo-700 hover:bg-indigo-100/70 transition"
+                [title]="getPromoteLabel(year)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z"
+                  />
+                </svg>
+              </button>
+
+              <!-- Delete all -->
+              <button
+                (click)="deleteAllYear(year)"
+                class="p-3.5 rounded-2xl text-red-600 hover:bg-red-50 transition"
+                title="ลบนักศึกษาชั้นปี {{ year }} ทั้งหมด"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="relative">
+            <table class="w-full">
+              <thead>
+                <tr
+                  class="bg-gradient-to-r from-slate-200/95 via-slate-100/95 to-slate-200/90 border-b border-slate-200"
+                >
+                  <th
+                    class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+                  >
+                    รหัสนักศึกษา
+                  </th>
+                  <th
+                    class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+                  >
+                    ชื่อ-นามสกุล
+                  </th>
+                  <th
+                    class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+                  >
+                    ชื่อเล่น
+                  </th>
+                  <th
+                    class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+                  >
+                    เลขบัตรประชาชน
+                  </th>
+                  <th
+                    class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+                  >
+                    สถานะ
+                  </th>
+                  <th
+                    class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+                  >
+                    จัดการ
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody class="divide-y divide-slate-100/80">
+                <tr
+                  *ngFor="let student of studentsByYear[year]"
+                  class="hover:bg-orange-50/45 transition-colors"
+                >
+                  <td class="px-8 py-5 text-lg font-semibold text-slate-800">
+                    {{ student.studentId }}
+                  </td>
+                  <td class="px-8 py-5 text-lg font-semibold text-slate-800">
+                    {{ student.fullName }}
+                  </td>
+                  <td class="px-8 py-5 text-lg text-slate-700">
+                    {{ student.nickname || "-" }}
+                  </td>
+                  <td class="px-8 py-5 text-lg text-slate-700">
+                    {{ student.citizenId }}
+                  </td>
+
+                  <td class="px-8 py-5">
+                    <span
+                      class="inline-flex items-center px-4 py-2 rounded-full text-base font-extrabold border"
+                      [class.bg-emerald-50]="student.status === 'active'"
+                      [class.text-emerald-700]="student.status === 'active'"
+                      [class.border-emerald-200]="student.status === 'active'"
+                      [class.bg-slate-100]="student.status === 'inactive'"
+                      [class.text-slate-500]="student.status === 'inactive'"
+                      [class.border-slate-200]="student.status === 'inactive'"
+                    >
+                      <span
+                        class="mr-2.5 inline-block h-2.5 w-2.5 rounded-full"
+                        [class.bg-emerald-500]="student.status === 'active'"
+                        [class.bg-slate-400]="student.status === 'inactive'"
+                      ></span>
+                      {{ student.status }}
+                    </span>
+                  </td>
+
+                  <td class="p-6">
+                    <div class="flex items-center gap-4">
+                      <!-- View/Edit -->
+                      <button
+                        (click)="openEditStudentDialog(student)"
+                        class="p-2 rounded-2xl text-indigo-600 hover:bg-indigo-50 transition"
+                        title="ดู / แก้ไข"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-8 w-8"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          />
+                        </svg>
+                      </button>
+
+                      <!-- Delete -->
+                      <button
+                        (click)="deleteStudent(student.studentId)"
+                        class="p-2 rounded-2xl text-red-600 hover:bg-red-50 transition"
+                        title="ลบ"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-8 w-8"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr
+                  *ngIf="
+                    !studentsByYear[year] || studentsByYear[year].length === 0
+                  "
+                >
+                  <td colspan="6" class="px-8 py-14 text-center">
+                    <div
+                      class="inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-white/90 border border-white/70 text-lg font-semibold text-slate-700"
+                    >
+                      ไม่พบรายชื่อนักศึกษา
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div
+            *ngIf="
+              !isSearching && (studentPagination[year]?.totalPages ?? 0) > 1
+            "
+            class="px-8 py-6 border-t border-white/60 flex items-center justify-center gap-2.5 bg-white/60"
+          >
+            <button
+              (click)="onStudentPageChange(year, studentCurrentPages[year] - 1)"
+              [disabled]="studentCurrentPages[year] === 1"
+              class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+              [class.bg-white]="studentCurrentPages[year] !== 1"
+              [class.hover:bg-slate-50]="studentCurrentPages[year] !== 1"
+              [class.text-slate-700]="studentCurrentPages[year] !== 1"
+              [class.text-slate-300]="studentCurrentPages[year] === 1"
+              [class.cursor-not-allowed]="studentCurrentPages[year] === 1"
+              [class.bg-slate-50]="studentCurrentPages[year] === 1"
+              [class.border-slate-200]="true"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+
+            <button
+              *ngFor="
+                let page of getPageNumbers(
+                  studentPagination[year],
+                  studentCurrentPages[year]
+                )
+              "
+              (click)="onStudentPageChange(year, page)"
+              class="px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+              [class.bg-gradient-to-r]="page === studentCurrentPages[year]"
+              [class.from-orange-600]="page === studentCurrentPages[year]"
+              [class.to-orange-500]="page === studentCurrentPages[year]"
+              [class.text-white]="page === studentCurrentPages[year]"
+              [class.border-orange-500]="page === studentCurrentPages[year]"
+              [class.bg-white]="page !== studentCurrentPages[year]"
+              [class.hover:bg-slate-50]="page !== studentCurrentPages[year]"
+              [class.text-slate-700]="page !== studentCurrentPages[year]"
+              [class.border-slate-200]="page !== studentCurrentPages[year]"
+            >
+              {{ page }}
+            </button>
+
+            <button
+              (click)="onStudentPageChange(year, studentCurrentPages[year] + 1)"
+              [disabled]="
+                studentCurrentPages[year] ===
+                studentPagination[year]?.totalPages
+              "
+              class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+              [class.bg-white]="
+                studentCurrentPages[year] !==
+                studentPagination[year]?.totalPages
+              "
+              [class.hover:bg-slate-50]="
+                studentCurrentPages[year] !==
+                studentPagination[year]?.totalPages
+              "
+              [class.text-slate-700]="
+                studentCurrentPages[year] !==
+                studentPagination[year]?.totalPages
+              "
+              [class.text-slate-300]="
+                studentCurrentPages[year] ===
+                studentPagination[year]?.totalPages
+              "
+              [class.cursor-not-allowed]="
+                studentCurrentPages[year] ===
+                studentPagination[year]?.totalPages
+              "
+              [class.bg-slate-50]="
+                studentCurrentPages[year] ===
+                studentPagination[year]?.totalPages
+              "
+              [class.border-slate-200]="true"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================== GRADUATED PANEL ==================== -->
+        <div
+          *ngIf="graduatedStudents.length > 0 || !isSearching"
+          class="rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] overflow-hidden relative"
+        >
+          <div
+            class="absolute -top-28 -left-28 w-96 h-96 bg-orange-300/18 rounded-full blur-3xl"
+          ></div>
+
+          <!-- Panel Header -->
+          <div
+            class="relative flex items-center justify-between px-8 py-6 border-b border-white/60 bg-gradient-to-r from-orange-50/95 via-white/70 to-white/50"
+          >
+            <div class="flex items-center gap-4">
+              <h3 class="text-2xl font-black tracking-wide text-orange-700">
+                สำเร็จการศึกษา
+              </h3>
+
+              <span
+                class="text-base font-extrabold text-slate-800 bg-white/85 border border-white/70 px-4 py-2 rounded-full"
+              >
+                {{ graduatedPagination?.total || graduatedStudents.length }} คน
+              </span>
+
+              <div class="hidden md:flex items-center gap-2 ml-1">
+                <div
+                  class="h-2 w-16 rounded-full bg-gradient-to-r from-orange-500 to-indigo-500"
+                ></div>
+                <div class="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
+              </div>
+            </div>
+
+            <!-- Delete all -->
+            <button
+              (click)="deleteAllYear('graduated')"
+              class="p-3.5 rounded-2xl text-red-600 hover:bg-red-50 transition"
+              title="ลบนักศึกษาที่สำเร็จการศึกษาทั้งหมด"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Table -->
+          <div class="relative">
+            <table class="w-full">
+              <thead>
+                <tr
+                  class="bg-gradient-to-r from-slate-200/95 via-slate-100/95 to-slate-200/90 border-b border-slate-200"
+                >
+                  <th
+                    class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+                  >
+                    รหัสนักศึกษา
+                  </th>
+                  <th
+                    class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+                  >
+                    ชื่อ-นามสกุล
+                  </th>
+                  <th
+                    class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+                  >
+                    ชื่อเล่น
+                  </th>
+                  <th
+                    class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+                  >
+                    เลขบัตรประชาชน
+                  </th>
+                  <th
+                    class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+                  >
+                    จัดการ
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody class="divide-y divide-slate-100/80">
+                <tr
+                  *ngFor="let student of graduatedStudents"
+                  class="hover:bg-orange-50/45 transition-colors"
+                >
+                  <td class="px-8 py-5 text-lg font-semibold text-slate-800">
+                    {{ student.studentId }}
+                  </td>
+                  <td class="px-8 py-5 text-lg font-semibold text-slate-800">
+                    {{ student.fullName }}
+                  </td>
+                  <td class="px-8 py-5 text-lg text-slate-700">
+                    {{ student.nickname || "-" }}
+                  </td>
+                  <td class="px-8 py-5 text-lg text-slate-700">
+                    {{ student.citizenId }}
+                  </td>
+
+                  <td class="p-6">
+                    <div class="flex items-center gap-4">
+                      <button
+                        (click)="openEditStudentDialog(student)"
+                        class="p-2 rounded-2xl text-indigo-600 hover:bg-indigo-50 transition"
+                        title="ดู / แก้ไข"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-8 w-8"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          />
+                        </svg>
+                      </button>
+
+                      <button
+                        (click)="deleteStudent(student.studentId)"
+                        class="p-2 rounded-2xl text-red-600 hover:bg-red-50 transition"
+                        title="ลบ"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-8 w-8"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr *ngIf="graduatedStudents.length === 0">
+                  <td colspan="5" class="px-8 py-14 text-center">
+                    <div
+                      class="inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-white/90 border border-white/70 text-lg font-semibold text-slate-700"
+                    >
+                      ไม่พบรายชื่อนักศึกษาที่สำเร็จการศึกษา
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div
+            *ngIf="!isSearching && (graduatedPagination?.totalPages ?? 0) > 1"
+            class="px-8 py-6 border-t border-white/60 flex items-center justify-center gap-2.5 bg-white/60"
+          >
+            <button
+              (click)="onGraduatedPageChange(graduatedCurrentPage - 1)"
+              [disabled]="graduatedCurrentPage === 1"
+              class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+              [class.bg-white]="graduatedCurrentPage !== 1"
+              [class.hover:bg-slate-50]="graduatedCurrentPage !== 1"
+              [class.text-slate-700]="graduatedCurrentPage !== 1"
+              [class.text-slate-300]="graduatedCurrentPage === 1"
+              [class.cursor-not-allowed]="graduatedCurrentPage === 1"
+              [class.bg-slate-50]="graduatedCurrentPage === 1"
+              [class.border-slate-200]="true"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+
+            <button
+              *ngFor="
+                let page of getPageNumbers(
+                  graduatedPagination,
+                  graduatedCurrentPage
+                )
+              "
+              (click)="onGraduatedPageChange(page)"
+              class="px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+              [class.bg-gradient-to-r]="page === graduatedCurrentPage"
+              [class.from-orange-600]="page === graduatedCurrentPage"
+              [class.to-orange-500]="page === graduatedCurrentPage"
+              [class.text-white]="page === graduatedCurrentPage"
+              [class.border-orange-500]="page === graduatedCurrentPage"
+              [class.bg-white]="page !== graduatedCurrentPage"
+              [class.hover:bg-slate-50]="page !== graduatedCurrentPage"
+              [class.text-slate-700]="page !== graduatedCurrentPage"
+              [class.border-slate-200]="page !== graduatedCurrentPage"
+            >
+              {{ page }}
+            </button>
+
+            <button
+              (click)="onGraduatedPageChange(graduatedCurrentPage + 1)"
+              [disabled]="
+                graduatedCurrentPage === graduatedPagination?.totalPages
+              "
+              class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+              [class.bg-white]="
+                graduatedCurrentPage !== graduatedPagination?.totalPages
+              "
+              [class.hover:bg-slate-50]="
+                graduatedCurrentPage !== graduatedPagination?.totalPages
+              "
+              [class.text-slate-700]="
+                graduatedCurrentPage !== graduatedPagination?.totalPages
+              "
+              [class.text-slate-300]="
+                graduatedCurrentPage === graduatedPagination?.totalPages
+              "
+              [class.cursor-not-allowed]="
+                graduatedCurrentPage === graduatedPagination?.totalPages
+              "
+              [class.bg-slate-50]="
+                graduatedCurrentPage === graduatedPagination?.totalPages
+              "
+              [class.border-slate-200]="true"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Data when searching -->
+      <div
+        *ngIf="
+          isSearching &&
+          getStudentYearLevels().length === 0 &&
+          graduatedStudents.length === 0
+        "
+        class="rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] p-14 text-center text-lg font-semibold text-slate-700"
+      >
+        ไม่พบนักศึกษา
+      </div>
+    </div>
+
+    <!-- ==================== TEACHERS SECTION ==================== -->
+    <div *ngIf="activeSection === 'teachers'">
+      <!-- Search + Create -->
+      <div
+        class="mb-8 p-7 rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] relative overflow-hidden"
+      >
+        <div
+          class="absolute -top-20 -right-20 w-80 h-80 bg-indigo-300/25 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute -bottom-20 -left-20 w-80 h-80 bg-orange-300/25 rounded-full blur-3xl"
+        ></div>
+
+        <div class="relative flex items-center gap-5 flex-wrap">
+          <div class="relative flex-1 min-w-[320px]">
+            <div
+              class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-slate-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+
+            <input
+              type="text"
+              [(ngModel)]="searchTeacherQuery"
+              (ngModelChange)="onTeacherSearchChange($event)"
+              placeholder="ค้นหาด้วยอีเมลหรือชื่ออาจารย์"
+              class="w-full pl-14 pr-5 py-4 rounded-2xl text-lg bg-white/90 border border-white/70 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent"
+            />
+          </div>
+
+          <button
+            (click)="openCreateTeacherDialog()"
+            class="relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl text-lg font-black text-white bg-gradient-to-r from-orange-600 to-orange-500 shadow-lg hover:shadow-xl hover:brightness-[1.02] active:scale-[0.99] transition overflow-hidden group whitespace-nowrap"
+          >
+            <span
+              class="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-white/15"
+            ></span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-7 w-7 relative z-10"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            <span class="relative z-10">เพิ่มรายชื่ออาจารย์</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Teachers Table -->
+      <div
+        class="rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] overflow-hidden relative"
+      >
+        <div
+          class="absolute -top-28 -right-28 w-96 h-96 bg-indigo-300/16 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute -bottom-28 -left-28 w-96 h-96 bg-orange-300/16 rounded-full blur-3xl"
+        ></div>
+
+        <table class="w-full relative">
+          <thead>
+            <tr
+              class="bg-gradient-to-r from-slate-200/95 via-slate-100/95 to-slate-200/90 border-b border-slate-200"
+            >
+              <th
+                class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+              >
+                อีเมล
+              </th>
+              <th
+                class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+              >
+                ชื่อ-นามสกุล
+              </th>
+              <th
+                class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+              >
+                ชื่อเล่น
+              </th>
+              <th
+                class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+              >
+                เลขบัตรประชาชน
+              </th>
+              <th
+                class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+              >
+                สถานะ
+              </th>
+              <th
+                class="whitespace-nowrap px-8 py-5 text-left text-base font-black text-slate-700 uppercase tracking-wider"
+              >
+                จัดการ
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-slate-100/80">
+            <tr
+              *ngFor="let teacher of teachers"
+              class="hover:bg-orange-50/45 transition-colors"
+            >
+              <td class="px-8 py-5 text-lg font-semibold text-slate-800">
+                {{ teacher.email }}
+              </td>
+
+              <td class="px-8 py-5 text-lg font-semibold text-slate-800">
+                {{ teacher.fullName }}
+              </td>
+
+              <td class="px-8 py-5 text-lg text-slate-700">
+                {{ teacher.nickname || "-" }}
+              </td>
+
+              <td class="px-8 py-5 text-lg text-slate-700">
+                {{ teacher.citizenId }}
+              </td>
+
+              <td class="p-6">
+                <span
+                  class="inline-flex items-center px-4 py-2 rounded-full text-base font-extrabold border"
+                  [class.bg-emerald-50]="teacher.status === 'active'"
+                  [class.text-emerald-700]="teacher.status === 'active'"
+                  [class.border-emerald-200]="teacher.status === 'active'"
+                  [class.bg-slate-100]="teacher.status === 'inactive'"
+                  [class.text-slate-500]="teacher.status === 'inactive'"
+                  [class.border-slate-200]="teacher.status === 'inactive'"
+                >
+                  <span
+                    class="mr-2.5 inline-block h-2.5 w-2.5 rounded-full"
+                    [class.bg-emerald-500]="teacher.status === 'active'"
+                    [class.bg-slate-400]="teacher.status === 'inactive'"
+                  ></span>
+                  {{ teacher.status }}
+                </span>
+              </td>
+
+              <td class="px-8 py-5">
+                <div class="flex items-center gap-4">
+                  <!-- View/Edit -->
+                  <button
+                    (click)="openEditTeacherDialog(teacher)"
+                    class="p-2 rounded-2xl text-indigo-600 hover:bg-indigo-50 transition"
+                    title="ดู / แก้ไข"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-8 w-8"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                  </button>
+
+                  <!-- Delete -->
+                  <button
+                    (click)="deleteTeacher(teacher.teacherId)"
+                    class="p-2 rounded-2xl text-red-600 hover:bg-red-50 transition"
+                    title="ลบ"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-8 w-8"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <tr *ngIf="teachers.length === 0">
+              <td colspan="6" class="px-8 py-14 text-center">
+                <div
+                  class="inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-white/90 border border-white/70 text-lg font-semibold text-slate-700"
+                >
+                  ไม่พบอาจารย์
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==================== ACTIVITIES SECTION ==================== -->
+    <div *ngIf="activeSection === 'activities'">
+      <!-- Search + Teacher Filter -->
+      <div
+        class="mb-8 p-7 rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] relative overflow-hidden"
+      >
+        <div
+          class="absolute -top-20 -right-20 w-80 h-80 bg-indigo-300/25 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute -bottom-20 -left-20 w-80 h-80 bg-orange-300/25 rounded-full blur-3xl"
+        ></div>
+
+        <div class="relative flex items-center gap-5 flex-wrap">
+          <!-- Search input -->
+          <div class="relative flex-1 min-w-[280px]">
+            <div
+              class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-slate-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+
+            <input
+              type="text"
+              [(ngModel)]="searchActivityQuery"
+              (ngModelChange)="onActivitySearchChange($event)"
+              placeholder="ค้นหาด้วยชื่อกิจกรรม"
+              class="w-full pl-14 pr-5 py-4 rounded-2xl text-lg bg-white/90 border border-white/70 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent"
+            />
+          </div>
+
+          <!-- Teacher dropdown -->
+          <select
+            [ngModel]="filterTeacherId"
+            (ngModelChange)="onActivityTeacherFilter($event)"
+            class="px-5 py-4 rounded-2xl text-lg bg-white/90 border border-white/70 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent min-w-[220px] text-slate-700"
+          >
+            <option [ngValue]="null">อาจารย์ทั้งหมด</option>
+            <option *ngFor="let teacher of teachers" [ngValue]="teacher.teacherId">
+              {{ teacher.fullName }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Total count — ขวา -->
+      <div class="mb-5 flex items-center justify-end" *ngIf="activityPagination.total > 0">
+        <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white/85 border border-white/70 shadow-sm text-base font-black text-slate-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          ทั้งหมด <span class="text-orange-600">{{ activityPagination.total }}</span> กิจกรรม
+        </span>
+      </div>
+
+      <div
+        *ngIf="activities.length === 0"
+        class="rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] p-14 text-center text-xl font-semibold text-slate-600"
+      >
+        ไม่พบกิจกรรม
+      </div>
+
+      <div class="grid grid-cols-1 gap-8" *ngIf="activities.length > 0">
+        <div
+          *ngFor="let activity of activities"
+          class="rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] overflow-hidden relative"
+        >
+          <div class="absolute -top-28 -right-28 w-[28rem] h-[28rem] bg-orange-300/20 rounded-full blur-3xl"></div>
+          <div class="absolute -bottom-28 -left-28 w-[28rem] h-[28rem] bg-indigo-300/20 rounded-full blur-3xl"></div>
+
+          <!-- Header (clickable) -->
+          <button
+            (click)="toggleActivity(activity.activityId)"
+            class="relative w-full flex items-start justify-between px-8 py-7 text-left hover:bg-orange-50/40 transition gap-6"
+          >
+            <div class="flex-1 min-w-0">
+              <h3 class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
+                {{ activity.title }}
+              </h3>
+
+              <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span class="text-base sm:text-lg text-slate-500 font-medium">สร้างโดย</span>
+                <span class="text-base sm:text-lg font-bold text-slate-800">{{ activity.teacherName }}</span>
+                <span class="text-base sm:text-lg text-slate-400">({{ activity.teacherEmail }})</span>
+                <span class="text-slate-300 text-lg">•</span>
+                <span class="text-base sm:text-lg font-semibold text-slate-600">{{ formatDate(activity.startDate) }}</span>
+                <span class="text-slate-400">–</span>
+                <span class="text-base sm:text-lg font-semibold text-slate-600">{{ formatDate(activity.endDate) }}</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4 shrink-0 mt-1">
+              <span class="inline-flex items-center gap-2 text-base sm:text-lg font-black text-slate-800 bg-white/90 border border-white/70 px-5 py-2.5 rounded-2xl shadow-sm whitespace-nowrap">
+                <span class="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-orange-100 text-orange-700 font-black text-lg">
+                  {{ activity.groups?.length || 0 }}
+                </span>
+                กลุ่ม
+              </span>
+
+              <!-- Expand icon -->
+              <span class="grid place-items-center h-12 w-12 rounded-2xl bg-white/90 border border-white/70 shadow-sm shrink-0">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-7 w-7 text-slate-600 transition-transform"
+                  [class.rotate-180]="expandedActivities[activity.activityId]"
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </div>
+          </button>
+
+          <!-- Details (expanded) -->
+          <div
+            *ngIf="expandedActivities[activity.activityId]"
+            class="relative border-t border-slate-200/70 bg-white/40"
+          >
+            <!-- กั้นส่วนรายละเอียดออกจากส่วน header ด้วย inner container -->
+            <div class="px-8 py-8 space-y-8">
+
+              <!-- รายละเอียด -->
+              <div *ngIf="activity.description">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="h-7 w-1.5 rounded-full bg-gradient-to-b from-orange-500 to-orange-300"></div>
+                  <h4 class="text-xl font-black text-slate-800">รายละเอียด</h4>
+                </div>
+                <p class="text-lg text-slate-700 leading-relaxed pl-5">
+                  {{ activity.description }}
+                </p>
+              </div>
+
+              <!-- เกณฑ์การให้คะแนน -->
+              <div *ngIf="(activity.criteria?.length ?? 0) > 0">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="h-7 w-1.5 rounded-full bg-gradient-to-b from-indigo-500 to-indigo-300"></div>
+                  <h4 class="text-xl font-black text-slate-800">เกณฑ์การให้คะแนน</h4>
+                  <span class="text-base font-black text-indigo-600 bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-full">
+                    {{ activity.criteria.length }} เกณฑ์
+                  </span>
+                </div>
+                <div class="flex flex-wrap gap-3 pl-5">
+                  <span
+                    *ngFor="let c of activity.criteria"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-base font-bold bg-indigo-50 text-indigo-800 border border-indigo-200 shadow-sm"
+                  >
+                    <span class="h-2 w-2 rounded-full bg-indigo-400 shrink-0"></span>
+                    {{ c.name }}
+                    <span class="text-indigo-400 font-extrabold text-sm">(น้ำหนัก {{ c.weight }})</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- ผู้ให้คะแนน -->
+              <div *ngIf="(activity.graders?.length ?? 0) > 0">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="h-7 w-1.5 rounded-full bg-gradient-to-b from-violet-500 to-violet-300"></div>
+                  <h4 class="text-xl font-black text-slate-800">ผู้ให้คะแนน</h4>
+                  <span class="text-base font-black text-violet-600 bg-violet-50 border border-violet-200 px-3 py-1 rounded-full">
+                    {{ activity.graders.length }} คน
+                  </span>
+                </div>
+                <div class="flex flex-wrap gap-3 pl-5">
+                  <span
+                    *ngFor="let g of activity.graders"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-base font-bold bg-violet-50 text-violet-800 border border-violet-200 shadow-sm"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-violet-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    {{ g.fullName }}
+                    <span class="text-violet-400 font-semibold text-sm">({{ g.email }})</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- กลุ่มและสมาชิก -->
+              <div *ngIf="(activity.groups?.length ?? 0) > 0">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="h-7 w-1.5 rounded-full bg-gradient-to-b from-emerald-500 to-emerald-300"></div>
+                  <h4 class="text-xl font-black text-slate-800">กลุ่มและสมาชิก</h4>
+                  <span class="text-base font-black text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
+                    {{ activity.groups.length }} กลุ่ม
+                  </span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 pl-5">
+                  <div
+                    *ngFor="let group of activity.groups"
+                    class="rounded-2xl bg-white/90 border border-white/70 ring-1 ring-black/5 p-6 shadow-sm relative overflow-hidden"
+                  >
+                    <div class="absolute -top-16 -right-16 w-48 h-48 bg-orange-200/20 rounded-full blur-3xl"></div>
+                    <div class="relative">
+                      <!-- ชื่อกลุ่ม — หัวข้อย่อยที่ชัดเจน -->
+                      <div class="flex items-center gap-2 mb-3">
+                        <span class="grid place-items-center h-8 w-8 rounded-xl bg-orange-100 text-orange-700 shrink-0">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                        </span>
+                        <h5 class="text-lg font-black text-slate-900">{{ group.groupName }}</h5>
+                      </div>
+
+                      <p *ngIf="group.description" class="text-base text-slate-600 mb-4 pl-1">
+                        {{ group.description }}
+                      </p>
+
+                      <!-- สมาชิก -->
+                      <div *ngIf="(group.members?.length ?? 0) > 0">
+                        <p class="text-sm font-black text-slate-500 uppercase tracking-wider mb-2">สมาชิก {{ group.members.length }} คน</p>
+                        <div class="flex flex-wrap gap-2">
+                          <span
+                            *ngFor="let m of group.members"
+                            class="inline-flex items-center px-4 py-2 rounded-xl text-base font-semibold bg-slate-50 text-slate-800 border border-slate-200"
+                          >
+                            {{ m.fullName }}
+                            <span *ngIf="m.nickname" class="text-slate-400 ml-1.5 font-normal text-sm">({{ m.nickname }})</span>
+                          </span>
+                        </div>
+                      </div>
+
+                      <p *ngIf="!group.members || group.members.length === 0" class="text-base text-slate-400 italic">
+                        ยังไม่มีสมาชิก
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ยังไม่มีกลุ่ม -->
+              <div *ngIf="!activity.groups || activity.groups.length === 0">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="h-7 w-1.5 rounded-full bg-gradient-to-b from-slate-400 to-slate-200"></div>
+                  <h4 class="text-xl font-black text-slate-500">กลุ่มและสมาชิก</h4>
+                </div>
+                <p class="text-lg text-slate-400 italic pl-5">ยังไม่มีกลุ่มลงทะเบียน</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Pagination -->
+      <div
+        *ngIf="(activityPagination?.totalPages ?? 0) > 1"
+        class="mt-8 px-8 py-6 rounded-3xl bg-white/85 backdrop-blur-xl border border-white/70 ring-1 ring-black/5 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.28)] flex items-center justify-center gap-2.5"
+      >
+        <button
+          (click)="onActivityPageChange(activityCurrentPage - 1)"
+          [disabled]="activityCurrentPage === 1"
+          class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+          [class.bg-white]="activityCurrentPage !== 1"
+          [class.hover:bg-slate-50]="activityCurrentPage !== 1"
+          [class.text-slate-700]="activityCurrentPage !== 1"
+          [class.text-slate-300]="activityCurrentPage === 1"
+          [class.cursor-not-allowed]="activityCurrentPage === 1"
+          [class.bg-slate-50]="activityCurrentPage === 1"
+          [class.border-slate-200]="true"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <button
+          *ngFor="let page of getPageNumbers(activityPagination, activityCurrentPage)"
+          (click)="onActivityPageChange(page)"
+          class="px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+          [class.bg-gradient-to-r]="page === activityCurrentPage"
+          [class.from-orange-600]="page === activityCurrentPage"
+          [class.to-orange-500]="page === activityCurrentPage"
+          [class.text-white]="page === activityCurrentPage"
+          [class.border-orange-500]="page === activityCurrentPage"
+          [class.bg-white]="page !== activityCurrentPage"
+          [class.hover:bg-slate-50]="page !== activityCurrentPage"
+          [class.text-slate-700]="page !== activityCurrentPage"
+          [class.border-slate-200]="page !== activityCurrentPage"
+        >
+          {{ page }}
+        </button>
+
+        <button
+          (click)="onActivityPageChange(activityCurrentPage + 1)"
+          [disabled]="activityCurrentPage === activityPagination?.totalPages"
+          class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl border text-base font-extrabold transition"
+          [class.bg-white]="activityCurrentPage !== activityPagination?.totalPages"
+          [class.hover:bg-slate-50]="activityCurrentPage !== activityPagination?.totalPages"
+          [class.text-slate-700]="activityCurrentPage !== activityPagination?.totalPages"
+          [class.text-slate-300]="activityCurrentPage === activityPagination?.totalPages"
+          [class.cursor-not-allowed]="activityCurrentPage === activityPagination?.totalPages"
+          [class.bg-slate-50]="activityCurrentPage === activityPagination?.totalPages"
+          [class.border-slate-200]="true"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dialog Overlay -->
+<div
+  *ngIf="showDialog"
+  class="fixed inset-0 z-40 flex items-center justify-center p-4"
+  (click)="closeDialog()"
+>
+  <!-- backdrop -->
+  <div class="absolute inset-0 bg-slate-900/35 backdrop-blur-sm"></div>
+
+  <!-- modal -->
+  <div
+    class="relative z-10 w-full max-w-2xl overflow-hidden rounded-3xl bg-white/70 backdrop-blur-xl border border-white/60 shadow-[0_22px_60px_-28px_rgba(0,0,0,0.40)]"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- header -->
+    <div class="relative px-6 py-5 border-b border-white/60 overflow-hidden">
+      <div
+        class="absolute -top-16 -right-16 w-64 h-64 bg-orange-300/20 rounded-full blur-3xl"
+      ></div>
+
+      <div class="relative flex items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-black text-slate-900">
+            <span *ngIf="dialogType === 'student' && dialogMode === 'create'"
+              >เพิ่มนักศึกษา</span
+            >
+            <span *ngIf="dialogType === 'student' && dialogMode === 'edit'"
+              >แก้ไขนักศึกษา</span
+            >
+            <span *ngIf="dialogType === 'teacher' && dialogMode === 'create'"
+              >เพิ่มอาจารย์</span
+            >
+            <span *ngIf="dialogType === 'teacher' && dialogMode === 'edit'"
+              >แก้ไขอาจารย์</span
+            >
+          </h2>
+
+          <!-- signature mini divider -->
+          <div class="mt-2 flex items-center gap-2">
+            <div
+              class="h-1 w-16 rounded-full bg-gradient-to-r from-orange-500 to-indigo-500"
+            ></div>
+            <div class="h-1.5 w-1.5 rounded-full bg-orange-500"></div>
+            <div
+              class="h-1 w-10 rounded-full bg-gradient-to-r from-indigo-500 to-orange-500"
+            ></div>
+          </div>
+        </div>
+
+        <button
+          (click)="closeDialog()"
+          class="p-2 rounded-2xl text-slate-500 hover:text-slate-700 hover:bg-white/70 transition"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- body -->
+    <div class="p-6 sm:p-7 max-h-[78vh] overflow-y-auto">
+      <app-student-add-form
+        *ngIf="dialogType === 'student'"
+        [mode]="dialogMode"
+        [student]="editingStudent"
+        (saved)="onStudentSaved()"
+        (cancelled)="closeDialog()"
+      ></app-student-add-form>
+
+      <app-teacher-add-form
+        *ngIf="dialogType === 'teacher'"
+        [mode]="dialogMode"
+        [teacher]="editingTeacher"
+        (saved)="onTeacherSaved()"
+        (cancelled)="closeDialog()"
+      ></app-teacher-add-form>
+    </div>
+  </div>
+</div>

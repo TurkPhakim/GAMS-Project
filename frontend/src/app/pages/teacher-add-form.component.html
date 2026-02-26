@@ -1,0 +1,125 @@
+<form [formGroup]="addForm" (ngSubmit)="submitForm()" class="space-y-7">
+  <!-- Email -->
+  <div>
+    <label class="block text-lg font-black text-slate-800 tracking-wide mb-2">
+      อีเมลผู้ใช้งาน
+    </label>
+
+    <input
+      type="email"
+      formControlName="email"
+      placeholder="อีเมลผู้ใช้งาน"
+      class="w-full px-5 py-4 rounded-2xl text-base bg-white/90 border border-white/70 ring-1 ring-black/5 shadow-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition"
+    />
+  </div>
+
+  <!-- Full name -->
+  <div>
+    <label class="block text-lg font-black text-slate-800 tracking-wide mb-2">
+      ชื่อ-นามสกุล
+    </label>
+
+    <input
+      type="text"
+      formControlName="fullName"
+      placeholder="ชื่อ-นามสกุล"
+      class="w-full px-5 py-4 rounded-2xl text-base bg-white/90 border border-white/70 ring-1 ring-black/5 shadow-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition"
+    />
+  </div>
+
+  <!-- Nickname -->
+  <div>
+    <label class="block text-lg font-black text-slate-800 tracking-wide mb-2">
+      ชื่อเล่น
+    </label>
+
+    <input
+      type="text"
+      formControlName="nickname"
+      placeholder="ชื่อเล่น"
+      class="w-full px-5 py-4 rounded-2xl text-base bg-white/90 border border-white/70 ring-1 ring-black/5 shadow-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition"
+    />
+  </div>
+
+  <!-- Citizen ID -->
+  <div>
+    <label class="block text-lg font-black text-slate-800 tracking-wide mb-2">
+      เลขประจำตัวบัตรประชาชน
+    </label>
+
+    <input
+      type="text"
+      formControlName="citizenId"
+      placeholder="เลขประจำตัวบัตรประชาชน"
+      maxlength="13"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      class="w-full px-5 py-4 rounded-2xl text-base bg-white/90 border border-white/70 ring-1 ring-black/5 shadow-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition"
+    />
+  </div>
+
+  <!-- Status -->
+  <div>
+    <label class="block text-lg font-black text-slate-800 tracking-wide mb-2">
+      สถานะ
+    </label>
+
+    <button
+      type="button"
+      (click)="toggleStatus()"
+      class="inline-flex items-center gap-3 px-5 py-3.5 rounded-2xl text-base font-black transition border bg-white/85 backdrop-blur ring-1 ring-black/5 shadow-sm hover:brightness-[1.02]"
+      [class.border-emerald-200]="isActive"
+      [class.text-emerald-800]="isActive"
+      [class.bg-emerald-50]="isActive"
+      [class.border-slate-200]="!isActive"
+      [class.text-slate-700]="!isActive"
+      [class.bg-slate-50]="!isActive"
+    >
+      <span
+        class="w-3.5 h-3.5 rounded-full"
+        [class.bg-emerald-500]="isActive"
+        [class.bg-slate-400]="!isActive"
+      ></span>
+
+      {{ isActive ? "ใช้งาน" : "ไม่ใช้งาน" }}
+
+      <span
+        class="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-black border"
+        [class.bg-emerald-100]="isActive"
+        [class.text-emerald-800]="isActive"
+        [class.border-emerald-200]="isActive"
+        [class.bg-slate-100]="!isActive"
+        [class.text-slate-600]="!isActive"
+        [class.border-slate-200]="!isActive"
+      >
+        {{ isActive ? "ACTIVE" : "INACTIVE" }}
+      </span>
+    </button>
+  </div>
+
+  <!-- Actions -->
+  <div class="pt-2 flex flex-col sm:flex-row gap-4">
+    <button
+      type="button"
+      (click)="cancelled.emit()"
+      class="sm:flex-1 inline-flex items-center justify-center px-6 py-4 rounded-2xl text-lg font-black bg-white/85 border border-white/70 ring-1 ring-black/5 shadow-sm text-slate-800 hover:bg-white transition"
+    >
+      ยกเลิก
+    </button>
+
+    <button
+      type="submit"
+      [disabled]="addForm.invalid || submitting"
+      class="sm:flex-1 relative inline-flex items-center justify-center px-6 py-4 rounded-2xl text-lg font-black text-white bg-gradient-to-r from-orange-600 to-orange-500 shadow-lg hover:shadow-xl hover:brightness-[1.02] active:scale-[0.99] transition overflow-hidden group disabled:from-slate-300 disabled:to-slate-300 disabled:shadow-none disabled:cursor-not-allowed"
+    >
+      <span
+        class="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-white/15"
+      ></span>
+      <span class="relative z-10">
+        {{
+          submitting ? "กำลังบันทึก..." : mode === "create" ? "สร้าง" : "อัปเดต"
+        }}
+      </span>
+    </button>
+  </div>
+</form>
