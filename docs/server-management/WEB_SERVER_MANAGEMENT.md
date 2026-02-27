@@ -48,9 +48,9 @@ curl -I http://172.16.10.201
 
 | ไฟล์                                                          | สิ่งที่ทำ                                                       |
 | ------------------------------------------------------------- | --------------------------------------------------------------- |
-| [frontend/nginx.conf](../frontend/nginx.conf)                 | server block port 80 (redirect) + port 443 (HTTPS + SSL config) |
-| [scripts/init-letsencrypt.sh](../scripts/init-letsencrypt.sh) | script สำหรับขอ certificate ครั้งแรก                            |
-| [docker-compose.yml](../docker-compose.yml)                   | certbot service พร้อม auto-renewal loop                         |
+| [frontend/nginx.conf](../../frontend/nginx.conf)                 | server block port 80 (redirect) + port 443 (HTTPS + SSL config) |
+| [scripts/init-letsencrypt.sh](../../scripts/init-letsencrypt.sh) | script สำหรับขอ certificate ครั้งแรก                            |
+| [docker-compose.yml](../../docker-compose.yml)                   | certbot service พร้อม auto-renewal loop                         |
 
 > **หมายเหตุปัจจุบัน:** ใช้ self-signed certificate เพราะ Let's Encrypt ต้องการ domain จริง
 > และ port 80 เปิดจาก internet ซึ่งยังรอ IT มหาวิทยาลัยเปิด port forwarding อยู่
@@ -90,8 +90,8 @@ cat /etc/logrotate.d/gams-nginx
 
 | ไฟล์                                            | สิ่งที่ทำ                                                 |
 | ----------------------------------------------- | --------------------------------------------------------- |
-| [frontend/nginx.conf](../frontend/nginx.conf)   | กำหนด access_log และ error_log path + format              |
-| [nginx/logrotate.conf](../nginx/logrotate.conf) | config สำหรับวางบน host ที่ `/etc/logrotate.d/gams-nginx` |
+| [frontend/nginx.conf](../../frontend/nginx.conf)   | กำหนด access_log และ error_log path + format              |
+| [nginx/logrotate.conf](../../nginx/logrotate.conf) | config สำหรับวางบน host ที่ `/etc/logrotate.d/gams-nginx` |
 
 ---
 
@@ -120,7 +120,7 @@ curl -k -I https://172.16.10.201
 
 | ไฟล์                                          | สิ่งที่ทำ                       |
 | --------------------------------------------- | ------------------------------- |
-| [frontend/nginx.conf](../frontend/nginx.conf) | server block port 80 + port 443 |
+| [frontend/nginx.conf](../../frontend/nginx.conf) | server block port 80 + port 443 |
 
 ---
 
@@ -150,7 +150,7 @@ curl -k https://172.16.10.201/api/health
 
 | ไฟล์                                          | สิ่งที่ทำ                                            |
 | --------------------------------------------- | ---------------------------------------------------- |
-| [frontend/nginx.conf](../frontend/nginx.conf) | location `/api/` และ location `/${PMA_SECRET_PATH}/` |
+| [frontend/nginx.conf](../../frontend/nginx.conf) | location `/api/` และ location `/${PMA_SECRET_PATH}/` |
 
 ---
 
@@ -182,7 +182,7 @@ curl -k -I https://172.16.10.201/main.ab80e85ce6a802d9.js
 
 | ไฟล์                                          | สิ่งที่ทำ                                            |
 | --------------------------------------------- | ---------------------------------------------------- |
-| [frontend/nginx.conf](../frontend/nginx.conf) | `proxy_cache_path` + location `~* \.(js\|css\|...)$` |
+| [frontend/nginx.conf](../../frontend/nginx.conf) | `proxy_cache_path` + location `~* \.(js\|css\|...)$` |
 
 ---
 
@@ -227,7 +227,7 @@ docker exec gams-frontend cat /etc/nginx/nginx.conf | grep -E "worker|epoll|mult
 
 | ไฟล์                                          | สิ่งที่ทำ                   |
 | --------------------------------------------- | --------------------------- |
-| [frontend/nginx.conf](../frontend/nginx.conf) | main context + events block |
+| [frontend/nginx.conf](../../frontend/nginx.conf) | main context + events block |
 
 ---
 
@@ -264,7 +264,7 @@ curl -k -I https://172.16.10.201
 
 | ไฟล์                                          | สิ่งที่ทำ                          |
 | --------------------------------------------- | ---------------------------------- |
-| [frontend/nginx.conf](../frontend/nginx.conf) | `add_header` ใน HTTPS server block |
+| [frontend/nginx.conf](../../frontend/nginx.conf) | `add_header` ใน HTTPS server block |
 
 ---
 
@@ -272,9 +272,9 @@ curl -k -I https://172.16.10.201
 
 | ไฟล์                                                          | สถานะ     | สิ่งที่ทำ                                                                                  |
 | ------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------ |
-| [frontend/nginx.conf](../frontend/nginx.conf)                 | แก้ไข     | Worker tuning, HTTPS, Server Blocks, Reverse Proxy, Proxy Cache, Security Headers, Logging |
-| [frontend/Dockerfile](../frontend/Dockerfile)                 | แก้ไข     | ใช้ envsubst แทน `${DOMAIN}`, `${ADMIN_IP_RANGE}`, `${PMA_SECRET_PATH}` ตอน start          |
-| [nginx/logrotate.conf](../nginx/logrotate.conf)               | สร้างใหม่ | หมุนเวียน nginx log ทุกวัน เก็บ 14 วัน บีบอัดไฟล์เก่า                                      |
-| [scripts/init-letsencrypt.sh](../scripts/init-letsencrypt.sh) | สร้างใหม่ | Bootstrap SSL certificate ครั้งแรก (self-signed → Let's Encrypt)                           |
-| [docker-compose.yml](../docker-compose.yml)                   | แก้ไข     | certbot service, port 443, volumes สำหรับ cert และ logs                                    |
-| [.env.example](../.env.example)                               | แก้ไข     | เพิ่ม `DOMAIN`, `CERTBOT_EMAIL`, `ADMIN_IP_RANGE`, `PMA_SECRET_PATH`                       |
+| [frontend/nginx.conf](../../frontend/nginx.conf)                 | แก้ไข     | Worker tuning, HTTPS, Server Blocks, Reverse Proxy, Proxy Cache, Security Headers, Logging |
+| [frontend/Dockerfile](../../frontend/Dockerfile)                 | แก้ไข     | ใช้ envsubst แทน `${DOMAIN}`, `${ADMIN_IP_RANGE}`, `${PMA_SECRET_PATH}` ตอน start          |
+| [nginx/logrotate.conf](../../nginx/logrotate.conf)               | สร้างใหม่ | หมุนเวียน nginx log ทุกวัน เก็บ 14 วัน บีบอัดไฟล์เก่า                                      |
+| [scripts/init-letsencrypt.sh](../../scripts/init-letsencrypt.sh) | สร้างใหม่ | Bootstrap SSL certificate ครั้งแรก (self-signed → Let's Encrypt)                           |
+| [docker-compose.yml](../../docker-compose.yml)                   | แก้ไข     | certbot service, port 443, volumes สำหรับ cert และ logs                                    |
+| [.env.example](../../.env.example)                               | แก้ไข     | เพิ่ม `DOMAIN`, `CERTBOT_EMAIL`, `ADMIN_IP_RANGE`, `PMA_SECRET_PATH`                       |

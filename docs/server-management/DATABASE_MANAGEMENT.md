@@ -27,7 +27,7 @@
 
 ### ทำอะไร
 
-ตั้งค่า MySQL ผ่าน flags ใน [docker-compose.yml](../docker-compose.yml):
+ตั้งค่า MySQL ผ่าน flags ใน [docker-compose.yml](../../docker-compose.yml):
 
 ```yaml
 command: >
@@ -61,8 +61,8 @@ source .env && docker exec gams-mysql mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" \
 
 | ไฟล์ | สิ่งที่ทำ |
 |------|---------|
-| [docker-compose.yml](../docker-compose.yml) | MySQL command flags สำหรับ performance tuning |
-| [.env.example](../.env.example) | `MYSQL_INNODB_BUFFER_POOL_SIZE`, `MYSQL_MAX_CONNECTIONS` |
+| [docker-compose.yml](../../docker-compose.yml) | MySQL command flags สำหรับ performance tuning |
+| [.env.example](../../.env.example) | `MYSQL_INNODB_BUFFER_POOL_SIZE`, `MYSQL_MAX_CONNECTIONS` |
 
 ---
 
@@ -72,7 +72,7 @@ source .env && docker exec gams-mysql mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" \
 
 - สร้าง MySQL user ชื่อ `gams_app` ที่มีสิทธิ์เฉพาะ `SELECT, INSERT, UPDATE, DELETE` บน `gams_db` เท่านั้น
 - backend เชื่อมต่อ MySQL ด้วย `gams_app` แทน root
-- script [database/03-create-app-user.sh](../database/03-create-app-user.sh) สร้าง user อัตโนมัติตอน MySQL first-init
+- script [database/03-create-app-user.sh](../../database/03-create-app-user.sh) สร้าง user อัตโนมัติตอน MySQL first-init
 
 ```sql
 GRANT SELECT, INSERT, UPDATE, DELETE ON `gams_db`.* TO 'gams_app'@'%';
@@ -101,8 +101,8 @@ source .env && docker exec gams-mysql mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" \
 
 | ไฟล์ | สิ่งที่ทำ |
 |------|---------|
-| [database/03-create-app-user.sh](../database/03-create-app-user.sh) | script สร้าง MySQL app user สิทธิ์จำกัด ตอน first-init |
-| [docker-compose.yml](../docker-compose.yml) | `DB_USER: ${MYSQL_APP_USER}` ใน backend service |
+| [database/03-create-app-user.sh](../../database/03-create-app-user.sh) | script สร้าง MySQL app user สิทธิ์จำกัด ตอน first-init |
+| [docker-compose.yml](../../docker-compose.yml) | `DB_USER: ${MYSQL_APP_USER}` ใน backend service |
 
 > **หมายเหตุ:** ถ้า MySQL volume มีอยู่แล้ว (เคย start แล้ว) script init จะไม่รันอีก
 > ต้องสร้าง user ด้วยตนเอง หรือลบ volume แล้ว init ใหม่
@@ -137,7 +137,7 @@ source .env && docker exec gams-mysql mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" \
 
 | ไฟล์ | สิ่งที่ทำ |
 |------|---------|
-| [docker-compose.yml](../docker-compose.yml) | MySQL flags: `--slow-query-log`, `--long-query-time` |
+| [docker-compose.yml](../../docker-compose.yml) | MySQL flags: `--slow-query-log`, `--long-query-time` |
 
 ---
 
@@ -173,8 +173,8 @@ curl -k -o /dev/null -w "HTTP Status: %{http_code}\n" https://172.16.10.201/db-g
 
 | ไฟล์ | สิ่งที่ทำ |
 |------|---------|
-| [frontend/nginx.conf](../frontend/nginx.conf) | location `^~ /${PMA_SECRET_PATH}/` |
-| [.env.example](../.env.example) | `PMA_SECRET_PATH=db-gaos-kmitl-2026` |
+| [frontend/nginx.conf](../../frontend/nginx.conf) | location `^~ /${PMA_SECRET_PATH}/` |
+| [.env.example](../../.env.example) | `PMA_SECRET_PATH=db-gaos-kmitl-2026` |
 
 ---
 
@@ -182,7 +182,7 @@ curl -k -o /dev/null -w "HTTP Status: %{http_code}\n" https://172.16.10.201/db-g
 
 ### ทำอะไร
 
-สร้างไฟล์ [phpmyadmin/config.user.inc.php](../phpmyadmin/config.user.inc.php) และ mount เข้า container:
+สร้างไฟล์ [phpmyadmin/config.user.inc.php](../../phpmyadmin/config.user.inc.php) และ mount เข้า container:
 
 ```php
 $cfg['Servers'][1]['AllowRoot']       = false;  // ปิด root login
@@ -209,8 +209,8 @@ cat phpmyadmin/config.user.inc.php
 
 | ไฟล์ | สิ่งที่ทำ |
 |------|---------|
-| [phpmyadmin/config.user.inc.php](../phpmyadmin/config.user.inc.php) | AllowRoot=false, AllowNoPassword=false |
-| [docker-compose.yml](../docker-compose.yml) | mount config file เข้า container |
+| [phpmyadmin/config.user.inc.php](../../phpmyadmin/config.user.inc.php) | AllowRoot=false, AllowNoPassword=false |
+| [docker-compose.yml](../../docker-compose.yml) | mount config file เข้า container |
 
 ---
 
@@ -253,8 +253,8 @@ docker exec gams-frontend nginx -T 2>/dev/null | grep -A 10 "db-gaos-kmitl-2026"
 
 | ไฟล์ | สิ่งที่ทำ |
 |------|---------|
-| [frontend/nginx.conf](../frontend/nginx.conf) | `allow ${ADMIN_IP_RANGE}; deny all;` ใน phpMyAdmin location |
-| [.env.example](../.env.example) | `ADMIN_IP_RANGE=172.16.0.0/20` |
+| [frontend/nginx.conf](../../frontend/nginx.conf) | `allow ${ADMIN_IP_RANGE}; deny all;` ใน phpMyAdmin location |
+| [.env.example](../../.env.example) | `ADMIN_IP_RANGE=172.16.0.0/20` |
 
 ---
 
@@ -262,9 +262,9 @@ docker exec gams-frontend nginx -T 2>/dev/null | grep -A 10 "db-gaos-kmitl-2026"
 
 | ไฟล์ | สถานะ | สิ่งที่ทำ |
 |------|-------|---------|
-| [docker-compose.yml](../docker-compose.yml) | แก้ไข | MySQL tuning flags, app user env vars, phpMyAdmin ไม่ expose port, nginx env vars |
-| [database/03-create-app-user.sh](../database/03-create-app-user.sh) | สร้างใหม่ | script สร้าง MySQL app user สิทธิ์จำกัด (SELECT/INSERT/UPDATE/DELETE) |
-| [phpmyadmin/config.user.inc.php](../phpmyadmin/config.user.inc.php) | สร้างใหม่ | AllowRoot=false, AllowNoPassword=false |
-| [frontend/nginx.conf](../frontend/nginx.conf) | แก้ไข | phpMyAdmin location พร้อม IP allowlist และ URL obfuscation |
-| [frontend/Dockerfile](../frontend/Dockerfile) | แก้ไข | envsubst เพิ่ม `ADMIN_IP_RANGE` และ `PMA_SECRET_PATH` |
-| [.env.example](../.env.example) | แก้ไข | เพิ่ม `MYSQL_APP_USER`, `MYSQL_APP_PASSWORD`, `MYSQL_INNODB_BUFFER_POOL_SIZE`, `ADMIN_IP_RANGE`, `PMA_SECRET_PATH` |
+| [docker-compose.yml](../../docker-compose.yml) | แก้ไข | MySQL tuning flags, app user env vars, phpMyAdmin ไม่ expose port, nginx env vars |
+| [database/03-create-app-user.sh](../../database/03-create-app-user.sh) | สร้างใหม่ | script สร้าง MySQL app user สิทธิ์จำกัด (SELECT/INSERT/UPDATE/DELETE) |
+| [phpmyadmin/config.user.inc.php](../../phpmyadmin/config.user.inc.php) | สร้างใหม่ | AllowRoot=false, AllowNoPassword=false |
+| [frontend/nginx.conf](../../frontend/nginx.conf) | แก้ไข | phpMyAdmin location พร้อม IP allowlist และ URL obfuscation |
+| [frontend/Dockerfile](../../frontend/Dockerfile) | แก้ไข | envsubst เพิ่ม `ADMIN_IP_RANGE` และ `PMA_SECRET_PATH` |
+| [.env.example](../../.env.example) | แก้ไข | เพิ่ม `MYSQL_APP_USER`, `MYSQL_APP_PASSWORD`, `MYSQL_INNODB_BUFFER_POOL_SIZE`, `ADMIN_IP_RANGE`, `PMA_SECRET_PATH` |
