@@ -10,9 +10,9 @@
 | Backend  | Node.js + Express.js      |
 | Database | MySQL 8.0                 |
 | Auth     | MySQL + JWT               |
-| DevOps   | Docker Compose            |
+| DevOps   | Docker Compose + nginx    |
 
-## Quick Setup
+## Quick Setup (Local Development)
 
 ```bash
 cd "GAMS Project"
@@ -23,7 +23,13 @@ docker compose up -d --build
 - Backend API: http://localhost:3000/api
 - phpMyAdmin: http://localhost:8888
 
-> See `QUICK_START.md` for full deployment guide, credentials, and troubleshooting.
+## Production (Server มหาวิทยาลัย)
+
+- URL: https://172.16.10.201
+- phpMyAdmin: https://172.16.10.201/db-gaos-kmitl-2026/ (เฉพาะ subnet 172.16.0.0/20)
+- nginx reverse proxy: port 80/443 เท่านั้น (backend และ MySQL ไม่เปิด port สู่ภายนอก)
+
+> ดูรายละเอียดการ deploy ที่ `docs/deployment/QUICK_START.md`
 
 ---
 
@@ -130,30 +136,37 @@ docker compose up -d --build
 ## Architecture
 
 ```
-Frontend (Angular 17)     Backend (Express.js)      Database (MySQL 8.0)
-Port 4300                 Port 3000                 Port 3306
-├── Login                 ├── Auth (MySQL+JWT)      └── 12 tables
-├── Admin                 ├── Admin (11 endpoints)
-│   ├── Dashboard         ├── Teacher (11 endpoints)  FreeRADIUS (Docker)
-│   └── Manage            └── Student (8 endpoints)   Port 1812
-├── Teacher
-│   ├── Dashboard         phpMyAdmin
-│   ├── Activity List     Port 8888
-│   ├── Progress View
-│   ├── Create Activity
-│   ├── Grading
-│   └── Student List
-└── Student
-    ├── Dashboard
-    ├── Activities
-    ├── My Groups
-    └── Score Dashboard
+[Browser] → nginx (port 443 HTTPS)
+              ├── /         → Angular 17 SPA (static files)
+              ├── /api/     → Express.js backend (port 3000, internal)
+              └── /db-gaos-kmitl-2026/ → phpMyAdmin (internal, IP restricted)
+
+Backend (Express.js)        Database (MySQL 8.0)
+├── Auth (MySQL + JWT)      └── 12 tables
+├── Admin (17 endpoints)        DB user: gams_app (SELECT/INSERT/UPDATE/DELETE only)
+├── Teacher (12 endpoints)
+└── Student (8 endpoints)
 ```
 
-> For detailed file listing, see `FILE_MANIFEST.md`.
-> For full API examples, see `API_DOCUMENTATION.md`.
-> For user manual (Thai), see `USER_GUIDE.md`.
+**Local development:** Frontend port 4300, Backend port 3000, phpMyAdmin port 8888 (ไม่ผ่าน nginx)
 
 ---
 
-Last Updated: February 25, 2026
+## Documentation
+
+| หมวดหมู่ | ไฟล์ |
+| -------- | ---- |
+| Deploy & Operate | [docs/deployment/QUICK_START.md](docs/deployment/QUICK_START.md) |
+| Production Server Setup | [docs/deployment/SERVER_SETUP.md](docs/deployment/SERVER_SETUP.md) |
+| File Listing | [docs/deployment/FILE_MANIFEST.md](docs/deployment/FILE_MANIFEST.md) |
+| API Reference | [docs/development/API_DOCUMENTATION.md](docs/development/API_DOCUMENTATION.md) |
+| Developer Notes | [docs/development/IMPLEMENTATION_SUMMARY.md](docs/development/IMPLEMENTATION_SUMMARY.md) |
+| Project Spec | [docs/development/GAOS-PROJECT-SPEC.md](docs/development/GAOS-PROJECT-SPEC.md) |
+| Web Server (มิติ 3) | [docs/server-management/WEB_SERVER_MANAGEMENT.md](docs/server-management/WEB_SERVER_MANAGEMENT.md) |
+| Database (มิติ 4) | [docs/server-management/DATABASE_MANAGEMENT.md](docs/server-management/DATABASE_MANAGEMENT.md) |
+| Presentation (ทุกมิติ) | [docs/presentation/PRESENTATION_OVERVIEW.md](docs/presentation/PRESENTATION_OVERVIEW.md) |
+| User Manual (Thai) | [docs/user/USER_GUIDE.md](docs/user/USER_GUIDE.md) |
+
+---
+
+Last Updated: February 28, 2026

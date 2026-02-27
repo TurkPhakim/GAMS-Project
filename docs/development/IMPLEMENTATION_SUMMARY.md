@@ -1,6 +1,6 @@
 # GAMS Implementation Summary
 
-> Developer architecture notes — สำหรับ API reference ดู `README.md`, สำหรับ file listing ดู `FILE_MANIFEST.md`
+> Developer architecture notes — สำหรับ API reference ดู `README.md`, สำหรับ file listing ดู `docs/deployment/FILE_MANIFEST.md`
 
 ---
 
@@ -8,7 +8,7 @@
 
 ### Backend (Express.js)
 
-- **Auth**: RADIUS + JWT login, loads nickname from students/teachers table
+- **Auth**: MySQL-based login (studentId/citizenId สำหรับนักศึกษา, email/citizenId สำหรับอาจารย์) → JWT token พร้อม role และ nickname
 - **Admin**: Student/teacher full CRUD (add, update, delete), bulk delete, delete-by-year, promote-all and promote-by-year, paginated search, read-only activity overview (search/filter by teacher)
 - **Teacher**: Activity management, multi-teacher grading (letter grades → GPA), submission, progress dashboard
 - **Student**: Group CRUD, available activities (smart sort), score dashboard (GPA calculation)
@@ -31,7 +31,8 @@
 
 - 5 Docker services: MySQL, phpMyAdmin, FreeRADIUS, Backend, Frontend
 - Database auto-initializes from `schema.sql` + `seed.sql` on first run
-- nginx reverse proxy routes `/api/` to backend — no CORS issues, single port exposure
+- nginx reverse proxy: `/api/` → backend, `/` → Angular SPA, `/${PMA_SECRET_PATH}/` → phpMyAdmin
+- Production: HTTPS บน port 443, nginx enforce redirect HTTP → HTTPS
 
 ---
 
@@ -65,5 +66,6 @@ GPA >= 3.25 → B+  |   >= 2.25 → C+  |   >= 1.25 → D+  |   < 0.50  → F
 - **Year levels column**: `getYearLevels(activity)` parses `targetYearLevels` JSON field (handles string or array); displays "ปี x" badges or "ทุกชั้นปี"
 - **Login error modal**: error callback calls `modalService.showError()` — no `this.error` property in template
 - **Docker rebuild**: must use `--no-cache` flag — `docker compose build --no-cache frontend && docker compose up -d frontend`
+- **nginx log files**: `gams-access.log` และ `gams-error.log` (ไม่ใช้ชื่อ default `access.log`/`error.log` เพราะ nginx:alpine symlink ไปที่ stdout/stderr)
 
-Last Updated: February 25, 2026
+Last Updated: February 28, 2026

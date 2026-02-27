@@ -1,6 +1,6 @@
 # GAMS Quick Start Guide
 
-> คู่มือ Deploy และ Operate ระบบ — สำหรับ Feature ของระบบดู `USER_GUIDE.md`
+> คู่มือ Deploy และ Operate ระบบ — สำหรับ Feature ของระบบดู `docs/user/USER_GUIDE.md`
 
 ---
 
@@ -25,9 +25,6 @@ docker compose up -d
 docker compose build --no-cache frontend && docker compose up -d frontend
 docker compose build --no-cache backend && docker compose up -d backend
 
-# rebuild พร้อมกันทั้งสองอย่าง
-docker compose build --no-cache frontend backend && docker compose up -d frontend backend
-
 # หยุด (ข้อมูล DB ยังอยู่)
 docker compose down
 
@@ -39,11 +36,23 @@ docker compose down -v
 
 ## URLs & Credentials
 
+### Local Development
+
 | Service     | URL                       |
 | ----------- | ------------------------- |
 | Frontend    | http://localhost:4300     |
 | Backend API | http://localhost:3000/api |
 | phpMyAdmin  | http://localhost:8888     |
+
+### Production Server (172.16.10.201)
+
+| Service     | URL                                                                      |
+| ----------- | ------------------------------------------------------------------------ |
+| Frontend    | https://172.16.10.201                                                    |
+| Backend API | https://172.16.10.201/api (ผ่าน nginx reverse proxy)                    |
+| phpMyAdmin  | https://172.16.10.201/db-gaos-kmitl-2026/ (subnet มหาวิทยาลัยเท่านั้น) |
+
+### Test Credentials
 
 | Role    | Username                   | Password        |
 | ------- | -------------------------- | --------------- |
@@ -51,7 +60,7 @@ docker compose down -v
 | Teacher | `testTeacher123@gmail.com` | `1111111111111` |
 | Student | `1234568`                  | `2222222222222` |
 
-> Port สามารถเปลี่ยนได้ผ่านไฟล์ `.env` (เช่น `FRONTEND_PORT=80`)
+> Login: **นักศึกษา** ใช้ studentId + citizenId | **อาจารย์** ใช้ email + citizenId
 
 ---
 
@@ -77,71 +86,92 @@ docker stats
 
 ## Deploy บน Ubuntu Server (มหาวิทยาลัย)
 
+> คู่มือฉบับสมบูรณ์พร้อม SSL, Firewall, SSH Hardening, Backup ดูที่ [docs/deployment/SERVER_SETUP.md](SERVER_SETUP.md)
+
+**ขั้นตอนย่อ:**
+
 ```bash
 # 1. ติดตั้ง Docker
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo usermod -aG docker $USER && newgrp docker
 
-# 2. Copy โปรเจคขึ้น server
-scp -r "GAMS Project" user@server-ip:/home/user/gams-project
+# 2. Clone โปรเจคขึ้น server
+git clone <repo-url> ~/www/GAMS-Project
+cd ~/www/GAMS-Project
 
 # 3. สร้าง .env จาก template แล้วแก้ให้ครบ (สำคัญมาก!)
-cd /home/user/gams-project
 cp .env.example .env
 nano .env
 
-# 4. Build + Start
+# 4. ตั้งค่า SSL Certificate (เลือก Option ตาม server)
+# Option A: มี domain จริง → ./scripts/init-letsencrypt.sh
+# Option B: Internal IP เช่น 172.16.10.201 → ดู SERVER_SETUP.md ขั้นตอนที่ 4
+
+# 5. ติดตั้ง logrotate config สำหรับ nginx
+sudo cp nginx/logrotate.conf /etc/logrotate.d/gams-nginx
+
+# 6. Build + Start
 docker compose up -d --build
 ```
 
-### Security Checklist ก่อนขึ้น Server
+---
 
-| รายการ             | ค่าที่ต้องเปลี่ยน                                                             | ตัวแปรใน .env         |
-| ------------------ | ----------------------------------------------------------------------------- | --------------------- |
-| **MySQL Password** | รหัสผ่านที่ปลอดภัย (ไม่ใช้ค่า default)                                        | `MYSQL_ROOT_PASSWORD` |
-| **JWT Secret**     | random string ยาว 64+ ตัวอักษร                                                | `JWT_SECRET`          |
-| **RADIUS Secret**  | ต้องตรงกับ RADIUS server ของมหาวิทยาลัย                                       | `RADIUS_SECRET`       |
-| **Frontend Port**  | ถ้าใช้ port 80 ตั้ง `FRONTEND_PORT=80`                                        | `FRONTEND_PORT`       |
-| **phpMyAdmin**     | comment service ออกใน `docker-compose.yml` หากไม่ต้องการ expose บน production | -                     |
+## Security Checklist ก่อนขึ้น Server
 
-> **หมายเหตุ FreeRADIUS**: ค่าเริ่มต้นในระบบใช้ `freeradius/freeradius-server` image (config ทดสอบ, secret = `testing123`) สำหรับ production ต้องแก้ไขไฟล์ใน `docker/freeradius/` ให้ชี้ไปที่ RADIUS server จริงของมหาวิทยาลัย หรือเปลี่ยน `RADIUS_SECRET` ให้ตรงกัน
+| รายการ | ค่าที่ต้องเปลี่ยน | ตัวแปรใน .env |
+| ------ | --------------- | ------------- |
+| **MySQL Root Password** | รหัสผ่านที่ปลอดภัย (ไม่ใช้ค่า default) | `MYSQL_ROOT_PASSWORD` |
+| **MySQL App Password** | รหัสผ่านแยกสำหรับ gams_app user | `MYSQL_APP_PASSWORD` |
+| **JWT Secret** | random string ยาว 64+ ตัวอักษร | `JWT_SECRET` |
+| **Domain** | hostname หรือ IP ของ server | `DOMAIN` |
+| **Admin IP Range** | subnet ที่อนุญาตเข้า phpMyAdmin | `ADMIN_IP_RANGE` |
+| **phpMyAdmin Path** | URL path คาดเดายาก | `PMA_SECRET_PATH` |
+
+---
+
+## Log Commands (Production)
+
+```bash
+# ดู nginx access log
+docker exec gams-frontend tail -f /var/log/nginx/gams-access.log
+
+# ดู nginx error log
+docker exec gams-frontend tail -f /var/log/nginx/gams-error.log
+
+# ดู MySQL slow query log
+docker exec gams-mysql tail -f /var/log/mysql/slow-query.log
+
+# ดู backend log
+docker compose logs -f backend
+```
 
 ---
 
 ## Troubleshooting
 
 **MySQL Exited:**
-
 ```bash
 docker compose logs mysql
 docker compose down -v && docker compose up -d --build
 ```
 
 **Frontend แสดงข้อมูลเก่า / โค้ดใหม่ไม่ขึ้น:**
-
 ```bash
-# Docker cache ทำให้ Angular ไม่ recompile — ต้องใช้ --no-cache เสมอ
 docker compose build --no-cache frontend && docker compose up -d frontend
 ```
 
 **Frontend Exited:**
-
 ```bash
 docker compose logs frontend
 docker compose build --no-cache frontend && docker compose up -d frontend
 ```
 
-**Port ถูกใช้งานแล้ว:**
-
-```bash
-sudo lsof -i :4300   # เช็คว่า process ไหนใช้ port อยู่
-# แก้ port ใน .env แทน
-```
-
 **Login ไม่ผ่าน "User not found":** รอ 30-60 วิให้ DB initialize แล้ว refresh
 
 **คะแนนไม่แสดง:** อาจารย์ต้องกด "ส่งเพื่ออนุมัติ" ก่อน (draft ไม่แสดงให้นักศึกษา)
+
+**phpMyAdmin 403 Forbidden:** ตรวจสอบว่า IP ของเครื่องอยู่ใน `ADMIN_IP_RANGE` ที่กำหนดใน `.env`
 
 ---
 
@@ -157,4 +187,4 @@ cd frontend && npm install && npm start
 
 ---
 
-Last Updated: February 25, 2026 (v2)
+Last Updated: February 28, 2026
