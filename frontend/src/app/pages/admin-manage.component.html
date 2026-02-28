@@ -235,6 +235,7 @@
             <div class="flex items-center gap-3">
               <!-- Promote -->
               <button
+                *ngIf="(studentPagination[year]?.total || studentsByYear[year]?.length || 0) > 0"
                 (click)="promoteYear(year)"
                 class="p-3.5 rounded-2xl text-indigo-700 hover:bg-indigo-100/70 transition"
                 [title]="getPromoteLabel(year)"
@@ -257,6 +258,7 @@
 
               <!-- Delete all -->
               <button
+                *ngIf="(studentPagination[year]?.total || studentsByYear[year]?.length || 0) > 0"
                 (click)="deleteAllYear(year)"
                 class="p-3.5 rounded-2xl text-red-600 hover:bg-red-50 transition"
                 title="ลบนักศึกษาชั้นปี {{ year }} ทั้งหมด"

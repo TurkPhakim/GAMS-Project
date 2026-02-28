@@ -97,14 +97,19 @@ export class LoginComponent implements OnDestroy {
                 }, 1500);
             },
             error: (error: any) => {
-                this.failedAttempts++;
                 this.loading = false;
                 this.humanVerified = false;
 
+                if (error.status === 403) {
+                    this.modalService.showError('ไม่สามารถเข้าสู่ระบบได้', error.error?.message || 'บัญชีผู้ใช้นี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ');
+                    return;
+                }
+
+                this.failedAttempts++;
                 if (this.failedAttempts >= 3) {
                     this.startLockout();
                 } else {
-                    this.modalService.showError('เข้าสู่ระบบไม่สำเร็จ', error.error?.message || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+                    this.modalService.showError('เข้าสู่ระบบไม่สำเร็จ', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
                 }
             }
         });

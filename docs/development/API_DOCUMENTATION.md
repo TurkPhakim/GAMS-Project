@@ -38,6 +38,15 @@ Content-Type: application/json
 - `nickname` is `null` for admin role
 - `role`: `admin` | `teacher` | `student`
 
+**Error responses:**
+
+| Status | Condition | Message |
+| ------ | --------- | ------- |
+| 401 | Wrong credentials | `"Invalid credentials"` |
+| 401 | User not in DB | `"User not found in system"` |
+| 403 | Account inactive | `"บัญชีผู้ใช้นี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ"` |
+| 500 | DB/server error | `"Server error"` |
+
 ---
 
 ## Admin Endpoints

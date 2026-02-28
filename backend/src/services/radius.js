@@ -24,7 +24,7 @@ const authenticateWithRADIUS = async (username, password) => {
 
       // Teacher: username = email, password = citizenId
       const [teachers] = await connection.query(
-        'SELECT teacherId FROM teachers WHERE email = ? AND citizenId = ? AND status = "active"',
+        "SELECT teacherId FROM teachers WHERE email = ? AND citizenId = ?",
         [username, password],
       );
       if (teachers.length > 0) return true;

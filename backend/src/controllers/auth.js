@@ -45,7 +45,7 @@ const login = async (req, res) => {
     }
 
     if (user.status !== "active") {
-      return res.status(403).json({ message: "User account is inactive" });
+      return res.status(403).json({ message: "บัญชีผู้ใช้นี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ" });
     }
 
     // Fetch nickname from students/teachers table
