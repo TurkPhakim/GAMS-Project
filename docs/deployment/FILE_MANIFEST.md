@@ -2,7 +2,8 @@
 
 ## Project Root
 
-- **docker-compose.yml** - Full stack orchestration (5 services: mysql, phpmyadmin, freeradius, backend, frontend)
+- **docker-compose.yml** - Full stack orchestration (5 services: mysql, phpmyadmin, freeradius, backend, frontend) — ใช้บน Production Server
+- **docker-compose.local.yml** - Override สำหรับรันในเครื่องตัวเอง: HTTP-only nginx, disable certbot — ใช้ร่วมกับ `docker-compose.yml` ผ่าน `-f` flag
 - **README.md** - Project overview, API endpoints, database schema, architecture
 - **.env.example** - Environment variables template
 - **nginx/logrotate.conf** - Logrotate config สำหรับวางบน host ที่ `/etc/logrotate.d/gams-nginx`
@@ -86,7 +87,8 @@
 ### Configuration
 - **package.json** - Dependencies (Angular 17, Tailwind CSS)
 - **Dockerfile** - Multi-stage build: Node.js compile → nginx serve
-- **nginx.conf** - nginx config: HTTPS, reverse proxy, proxy cache, worker tuning, security headers, logging
+- **nginx.conf** - nginx config สำหรับ Production: HTTPS, reverse proxy, proxy cache, worker tuning, security headers, logging
+- **nginx.local.conf** - nginx config สำหรับ Local Development: HTTP-only (ไม่มี SSL), ไม่มี IP restriction สำหรับ phpMyAdmin
 
 ### Source Code (`src/app/`)
 

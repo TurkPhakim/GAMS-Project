@@ -1,0 +1,20 @@
+# Local development override
+# Usage: docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
+#
+# Differences from production:
+# - nginx uses HTTP only (no SSL) — no Let's Encrypt certs needed
+# - phpMyAdmin accessible without IP restriction
+# - certbot service disabled
+
+services:
+  frontend:
+    volumes:
+      - ./frontend/nginx.local.conf:/etc/nginx/nginx.conf.template:ro
+      - nginx-logs:/var/log/nginx
+    environment:
+      DOMAIN: localhost
+      ADMIN_IP_RANGE: 127.0.0.1
+      PMA_SECRET_PATH: ${PMA_SECRET_PATH:-db-manage-app}
+
+  certbot:
+    entrypoint: "/bin/sh -c 'echo Local mode: certbot disabled; sleep infinity'"

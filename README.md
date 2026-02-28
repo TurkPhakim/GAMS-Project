@@ -43,12 +43,13 @@
 
 ```bash
 cd "GAMS Project"
-docker compose up -d --build
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
 ```
 
-- Frontend: http://localhost:4300
-- Backend API: http://localhost:3000/api
-- phpMyAdmin: http://localhost:8888
+- Frontend: http://localhost
+- Backend API: http://localhost/api (ผ่าน nginx)
+- phpMyAdmin: http://localhost/db-gaos-kmitl-2026/
+- MySQL: localhost:3306 (MySQL client)
 
 ## Production (Server มหาวิทยาลัย)
 
@@ -175,7 +176,7 @@ Backend (Express.js)        Database (MySQL 8.0)
 └── Student (8 endpoints)
 ```
 
-**Local development:** Frontend port 4300, Backend port 3000, phpMyAdmin port 8888 (ไม่ผ่าน nginx)
+**Local development:** ทุก service เข้าผ่าน nginx port 80 (HTTP) — ใช้ `docker-compose.local.yml` เพราะไม่มี SSL cert
 
 ---
 

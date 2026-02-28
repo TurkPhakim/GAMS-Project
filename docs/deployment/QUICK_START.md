@@ -14,16 +14,19 @@
 
 ## Start / Stop
 
+### Local Development (เครื่องตัวเอง)
+
+ใช้ HTTP — ไม่ต้องมี SSL certificate
 ```bash
 # ครั้งแรก (build + start)
-docker compose up -d --build
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
 
 # ครั้งถัดไป (ไม่ได้แก้โค้ด)
-docker compose up -d
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
 
 # หลังแก้โค้ด — ต้องใช้ --no-cache เสมอ (ไม่งั้น Docker ใช้ cache เก่าไม่ compile ใหม่)
-docker compose build --no-cache frontend && docker compose up -d frontend
-docker compose build --no-cache backend && docker compose up -d backend
+docker compose -f docker-compose.yml -f docker-compose.local.yml build --no-cache frontend && \
+  docker compose -f docker-compose.yml -f docker-compose.local.yml up -d frontend
 
 # หยุด (ข้อมูล DB ยังอยู่)
 docker compose down
@@ -32,17 +35,38 @@ docker compose down
 docker compose down -v
 ```
 
+### Production Server
+
+ใช้ HTTPS — ต้องตั้งค่า SSL ก่อน (ดู [SERVER_SETUP.md](SERVER_SETUP.md))
+```bash
+# ครั้งแรก (build + start)
+docker compose up -d --build
+
+# ครั้งถัดไป (ไม่ได้แก้โค้ด)
+docker compose up -d
+
+# หลังแก้โค้ด
+docker compose build --no-cache frontend && docker compose up -d frontend
+docker compose build --no-cache backend && docker compose up -d backend
+
+# หยุด (ข้อมูล DB ยังอยู่)
+docker compose down
+```
+
 ---
 
 ## URLs & Credentials
 
 ### Local Development
 
-| Service     | URL                       |
-| ----------- | ------------------------- |
-| Frontend    | http://localhost:4300     |
-| Backend API | http://localhost:3000/api |
-| phpMyAdmin  | http://localhost:8888     |
+ทุก service เข้าผ่าน nginx port 80 เหมือน production แต่ใช้ HTTP แทน HTTPS
+
+| Service     | URL                                          |
+| ----------- | -------------------------------------------- |
+| Frontend    | http://localhost                             |
+| Backend API | http://localhost/api                         |
+| phpMyAdmin  | http://localhost/db-gaos-kmitl-2026/         |
+| MySQL       | localhost:3306 (MySQL client เช่น DBeaver)   |
 
 ### Production Server (172.16.10.201)
 
@@ -158,13 +182,19 @@ docker compose down -v && docker compose up -d --build
 
 **Frontend แสดงข้อมูลเก่า / โค้ดใหม่ไม่ขึ้น:**
 ```bash
+# Local
+docker compose -f docker-compose.yml -f docker-compose.local.yml build --no-cache frontend && \
+  docker compose -f docker-compose.yml -f docker-compose.local.yml up -d frontend
+# Server
 docker compose build --no-cache frontend && docker compose up -d frontend
 ```
 
-**Frontend Exited:**
+**Frontend Exited / Restarting (มักเกิดจาก SSL cert ไม่มี):**
 ```bash
 docker compose logs frontend
-docker compose build --no-cache frontend && docker compose up -d frontend
+# Local — ใช้ docker-compose.local.yml เสมอ เพื่อข้าม SSL requirement
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d frontend
+# Server — ต้องมี cert ก่อน ดู SERVER_SETUP.md ขั้นตอน SSL
 ```
 
 **Login ไม่ผ่าน "User not found":** รอ 30-60 วิให้ DB initialize แล้ว refresh
