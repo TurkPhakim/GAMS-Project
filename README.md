@@ -4,13 +4,40 @@
 
 ## Tech Stack
 
-| Layer    | Technology                |
-| -------- | ------------------------- |
-| Frontend | Angular 17 + Tailwind CSS |
-| Backend  | Node.js + Express.js      |
-| Database | MySQL 8.0                 |
-| Auth     | MySQL + JWT               |
-| DevOps   | Docker Compose + nginx    |
+**Frontend**
+
+| Technology         | หน้าที่       |
+| ------------------ | ------------- |
+| Angular 17         | SPA Framework |
+| TypeScript 5.2     | ภาษาหลัก      |
+| Tailwind CSS (CDN) | Styling       |
+| RxJS 7.8           | Async / HTTP  |
+
+**Backend**
+
+| Technology           | หน้าที่          |
+| -------------------- | ---------------- |
+| Node.js + Express.js | REST API Server  |
+| mysql2               | Database driver  |
+| jsonwebtoken (JWT)   | Auth token       |
+| bcryptjs             | Password hashing |
+| express-validator    | Input validation |
+
+**Database & Services**
+
+| Technology | หน้าที่                |
+| ---------- | ---------------------- |
+| MySQL 8.0  | ฐานข้อมูลหลัก          |
+| FreeRADIUS | Network authentication |
+| phpMyAdmin | DB management UI       |
+
+**Infrastructure**
+
+| Technology              | หน้าที่                         |
+| ----------------------- | ------------------------------- |
+| Docker Compose          | Container orchestration         |
+| nginx                   | Reverse proxy + SSL termination |
+| Let's Encrypt / Certbot | SSL certificate (auto-renew)    |
 
 ## Quick Setup (Local Development)
 
@@ -154,18 +181,18 @@ Backend (Express.js)        Database (MySQL 8.0)
 
 ## Documentation
 
-| หมวดหมู่ | ไฟล์ |
-| -------- | ---- |
-| Deploy & Operate | [docs/deployment/QUICK_START.md](docs/deployment/QUICK_START.md) |
-| Production Server Setup | [docs/deployment/SERVER_SETUP.md](docs/deployment/SERVER_SETUP.md) |
-| File Listing | [docs/deployment/FILE_MANIFEST.md](docs/deployment/FILE_MANIFEST.md) |
-| API Reference | [docs/development/API_DOCUMENTATION.md](docs/development/API_DOCUMENTATION.md) |
-| Developer Notes | [docs/development/IMPLEMENTATION_SUMMARY.md](docs/development/IMPLEMENTATION_SUMMARY.md) |
-| Project Spec | [docs/development/GAOS-PROJECT-SPEC.md](docs/development/GAOS-PROJECT-SPEC.md) |
-| Web Server (มิติ 3) | [docs/server-management/WEB_SERVER_MANAGEMENT.md](docs/server-management/WEB_SERVER_MANAGEMENT.md) |
-| Database (มิติ 4) | [docs/server-management/DATABASE_MANAGEMENT.md](docs/server-management/DATABASE_MANAGEMENT.md) |
-| Presentation (ทุกมิติ) | [docs/presentation/PRESENTATION_OVERVIEW.md](docs/presentation/PRESENTATION_OVERVIEW.md) |
-| User Manual (Thai) | [docs/user/USER_GUIDE.md](docs/user/USER_GUIDE.md) |
+| หมวดหมู่                | ไฟล์                                                                                               |
+| ----------------------- | -------------------------------------------------------------------------------------------------- |
+| Deploy & Operate        | [docs/deployment/QUICK_START.md](docs/deployment/QUICK_START.md)                                   |
+| Production Server Setup | [docs/deployment/SERVER_SETUP.md](docs/deployment/SERVER_SETUP.md)                                 |
+| File Listing            | [docs/deployment/FILE_MANIFEST.md](docs/deployment/FILE_MANIFEST.md)                               |
+| API Reference           | [docs/development/API_DOCUMENTATION.md](docs/development/API_DOCUMENTATION.md)                     |
+| Developer Notes         | [docs/development/IMPLEMENTATION_SUMMARY.md](docs/development/IMPLEMENTATION_SUMMARY.md)           |
+| Project Spec            | [docs/development/GAOS-PROJECT-SPEC.md](docs/development/GAOS-PROJECT-SPEC.md)                     |
+| Web Server (มิติ 3)     | [docs/server-management/WEB_SERVER_MANAGEMENT.md](docs/server-management/WEB_SERVER_MANAGEMENT.md) |
+| Database (มิติ 4)       | [docs/server-management/DATABASE_MANAGEMENT.md](docs/server-management/DATABASE_MANAGEMENT.md)     |
+| Presentation (ทุกมิติ)  | [docs/presentation/PRESENTATION_OVERVIEW.md](docs/presentation/PRESENTATION_OVERVIEW.md)           |
+| User Manual (Thai)      | [docs/user/USER_GUIDE.md](docs/user/USER_GUIDE.md)                                                 |
 
 ---
 
